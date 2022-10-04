@@ -1,7 +1,7 @@
 {
   "version": 3,
-  "name": "Simfinii Backend API Gateway",
   "port": 8080,
+  "name": "Simfinii Backend API Gateway",
   "cache_ttl": "3600s",
   "timeout": "10s",
   "read_timeout": "10s",
@@ -9,10 +9,14 @@
   "idle_timeout": "10s",
   "read_header_timeout": "10000ms",
   "max_idle_connections": 150,
-  "host": [
-    "http://api-gateway.prod.svc.cluster.local:8080"
-  ],
   "extra_config": {
+    "documentation/openapi": {
+      "version": "1",
+      "contact_name": "Yoan Yomba",
+      "contact_email": "yoan@simfinii.com",
+      "license_name": "MIT",
+      "license_url": "https://opensource.org/licenses/MIT"
+    },
     "router": {
       "return_error_msg": true,
       "forwarded_by_client_ip": true,
@@ -48,8 +52,6 @@
     },
     "security/cors": {
       "allow_origins": [
-        "http://192.168.99.100:3000",
-        "http://localhost:3000",
         "*"
       ],
       "allow_methods": [
@@ -64,17 +66,25 @@
       "allow_headers": [
         "*"
       ],
+      "expose_headers": [
+        "Content-Length"
+      ],
       "max_age": "12h"
     }
   },
+  "host": [
+    "http://api-gateway-1.prod.svc.cluster.local:8080",
+    "http://api-gateway-2.prod.svc.cluster.local:8080",
+    "http://api-gateway-3.prod.svc.cluster.local:8080"
+  ],
   "endpoints": [
     {
       "endpoint": "/v1/gateway/user",
       "method": "POST",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 50,
-          "client_max_rate": 5,
+          "max_rate": 1000,
+          "client_max_rate": 1000,
           "strategy": "ip"
         }
       },
@@ -96,10 +106,9 @@
               }
             },
             "qos/circuit-breaker": {
-              "interval": 60,
-              "timeout": 10,
+              "interval": 30,
+              "timeout": 5,
               "max_errors": 5,
-              "name": "user-service|[POST] /v1/gateway/user",
               "log_status_change": true
             }
           }
@@ -109,6 +118,13 @@
     {
       "endpoint": "/v1/gateway/user/setup/{userId}",
       "method": "POST",
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 1000,
+          "client_max_rate": 1000,
+          "strategy": "ip"
+        }
+      },
       "backend": [
         {
           "host": [
@@ -127,10 +143,9 @@
               }
             },
             "qos/circuit-breaker": {
-              "interval": 60,
-              "timeout": 10,
+              "interval": 30,
+              "timeout": 5,
               "max_errors": 5,
-              "name": "fis-service|[POST] /v1/gateway/user/setup/{userId}",
               "log_status_change": true
             }
           }
@@ -140,6 +155,13 @@
     {
       "endpoint": "/v1/gateway/user/token-exchange/{userID}/{publicToken}",
       "method": "POST",
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 1000,
+          "client_max_rate": 1000,
+          "strategy": "ip"
+        }
+      },
       "backend": [
         {
           "url_pattern": "/api/v1/token/exchange/{userID}/{publicToken}",
@@ -158,10 +180,9 @@
               }
             },
             "qos/circuit-breaker": {
-              "interval": 60,
-              "timeout": 10,
+              "interval": 30,
+              "timeout": 5,
               "max_errors": 5,
-              "name": "fis-service|[POST] /v1/gateway/user/token-exchange/{userID}/{publicToken}",
               "log_status_change": true
             }
           }
@@ -171,6 +192,13 @@
     {
       "endpoint": "/v1/gateway/user/logout/{id}",
       "method": "POST",
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 1000,
+          "client_max_rate": 1000,
+          "strategy": "ip"
+        }
+      },
       "backend": [
         {
           "url_pattern": "/api/v1/user/logout/{id}",
@@ -189,10 +217,9 @@
               }
             },
             "qos/circuit-breaker": {
-              "interval": 60,
-              "timeout": 10,
+              "interval": 30,
+              "timeout": 5,
               "max_errors": 5,
-              "name": "hdlss-auth-service|[POST] /v1/gateway/user/logout/{id}",
               "log_status_change": true
             }
           }
@@ -202,6 +229,13 @@
     {
       "endpoint": "/v1/gateway/user/{id}",
       "method": "DELETE",
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 1000,
+          "client_max_rate": 1000,
+          "strategy": "ip"
+        }
+      },
       "backend": [
         {
           "url_pattern": "/api/v1/user/{id}",
@@ -220,10 +254,9 @@
               }
             },
             "qos/circuit-breaker": {
-              "interval": 60,
-              "timeout": 10,
+              "interval": 30,
+              "timeout": 5,
               "max_errors": 5,
-              "name": "user-service|[DELETE] /v1/gateway/user/{id}",
               "log_status_change": true
             }
           }
@@ -233,6 +266,13 @@
     {
       "endpoint": "/v1/gateway/user/{id}",
       "method": "GET",
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 1000,
+          "client_max_rate": 1000,
+          "strategy": "ip"
+        }
+      },
       "backend": [
         {
           "url_pattern": "/api/v1/user/{id}",
@@ -251,10 +291,9 @@
               }
             },
             "qos/circuit-breaker": {
-              "interval": 60,
-              "timeout": 10,
+              "interval": 30,
+              "timeout": 5,
               "max_errors": 5,
-              "name": "user-service|[GET] /v1/gateway/user/{id}",
               "log_status_change": true
             }
           }
@@ -264,6 +303,13 @@
     {
       "endpoint": "/v1/gateway/financials/{userID}/{virtualAccountID}",
       "method": "GET",
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 1000,
+          "client_max_rate": 1000,
+          "strategy": "ip"
+        }
+      },
       "backend": [
         {
           "url_pattern": "/api/v1/accounts/user/{userID}/account/{virtualAccountID}",
@@ -282,10 +328,9 @@
               }
             },
             "qos/circuit-breaker": {
-              "interval": 60,
-              "timeout": 10,
+              "interval": 30,
+              "timeout": 5,
               "max_errors": 5,
-              "name": "fis-service|[GET] /v1/gateway/financials/{userID}/{virtualAccountID}",
               "log_status_change": true
             }
           }
@@ -295,6 +340,16 @@
     {
       "endpoint": "/v1/gateway/user/login/{email}/{password}",
       "method": "POST",
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 1000,
+          "client_max_rate": 1000,
+          "strategy": "ip"
+        },
+        "proxy": {
+          "sequential": true
+        }
+      },
       "backend": [
         {
           "url_pattern": "/api/v1/user?email={email}",
@@ -330,25 +385,14 @@
               }
             },
             "qos/circuit-breaker": {
-              "interval": 60,
-              "timeout": 10,
+              "interval": 30,
+              "timeout": 5,
               "max_errors": 5,
-              "name": "fis-service|[GET] /v1/gateway/financials/{userID}/{virtualAccountID}",
               "log_status_change": true
             }
           }
         }
-      ],
-      "extra_config": {
-        "proxy": {
-          "sequential": true
-        },
-        "qos/ratelimit/router": {
-          "max_rate": 50,
-          "client_max_rate": 10,
-          "strategy": "ip"
-        }
-      }
+      ]
     }
   ]
 }

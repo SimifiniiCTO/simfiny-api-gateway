@@ -1,3 +1,5 @@
+OUTPUT_FILE_NAME=config/krakend-flexible-config.compiled.json
+
 validate:
 	krakend check --config krakend.json -ddd -t
 	cat krakend.json | jq >> output.json 
@@ -38,3 +40,16 @@ deploy:
 
 lint-gateway-configs:
 	krakend check -tlc krakend.json
+
+gen:
+	FC_ENABLE=1 FC_SETTINGS="config/settings" FC_PARTIALS="config/partials" FC_TEMPLATES="config/templates" FC_OUT=$(OUTPUT_FILE_NAME) krakend check -t -ddd -c "config/krakend.tmpl"
+
+lint-output: 
+	krakend check -tlc $(OUTPUT_FILE_NAME)
+
+prettiefy:
+	cat $(OUTPUT_FILE_NAME) | jq >> krakend.compiled.json 
+	mv krakend.compiled.json krakend.json
+	rm $(OUTPUT_FILE_NAME)
+
+autogen: gen lint-output prettiefy
