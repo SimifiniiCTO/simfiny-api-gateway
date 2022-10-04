@@ -42,22 +42,14 @@ lint-gateway-configs:
 	krakend check -tlc krakend.json
 
 gen:
-	FC_ENABLE=1 FC_SETTINGS="config/settings" FC_PARTIALS="config/partials" FC_TEMPLATES="config/templates" FC_OUT=$(OUTPUT_FILE_NAME) krakend run -c "config/krakend.tmpl" \
+	FC_ENABLE=1 FC_SETTINGS="config/settings" FC_PARTIALS="config/partials" FC_TEMPLATES="config/templates" FC_OUT=$(OUTPUT_FILE_NAME) krakend check -t -ddd -c "config/krakend.tmpl"
 
-lint-output: krakend check -tlc $(OUTPUT_FILE_NAME)
+lint-output: 
+	krakend check -tlc $(OUTPUT_FILE_NAME)
 
 prettiefy:
-	jq . $(OUTPUT_FILE_NAME) >> krakend.compiled.json
+	cat $(OUTPUT_FILE_NAME) | jq >> krakend.compiled.json 
+	mv krakend.compiled.json krakend.json
+	rm $(OUTPUT_FILE_NAME)
 
-autogen: gen lint-output prettiefy 
-
-compile-flexible-config:
-	sudo docker run \
-        -v $(PWD)/config/:/etc/krakend/ \
-        -e FC_ENABLE=1 \
-        -e FC_SETTINGS=/etc/krakend/settings \
-        -e FC_PARTIALS=/etc/krakend/partials \
-        -e FC_TEMPLATES=/etc/krakend/templates \
-        -e FC_OUT=/etc/krakend.json \
-        devopsfaith/krakend \
-        check -c krakend.tmpl
+autogen: gen lint-output prettiefy
