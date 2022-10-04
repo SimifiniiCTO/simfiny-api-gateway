@@ -47,7 +47,7 @@ gen:
 lint-output: krakend check -tlc $(OUTPUT_FILE_NAME)
 
 prettiefy:
-	jq . $(OUTPUT_FILE_NAME)
+	jq . $(OUTPUT_FILE_NAME) >> krakend.compiled.json
 
 autogen: gen lint-output prettiefy 
 
