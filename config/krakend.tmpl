@@ -1,0 +1,15 @@
+{
+    "version": {{ .service.version }},
+    "port": {{ .service.port }},
+    "name": "{{ .service.name }}",
+    "cache_ttl": "{{ .service.cache_ttl }}",
+    "timeout": "{{ .service.timeout }}",
+    "read_timeout": "{{ .service.read_timeout }}",
+    "write_timeout": "{{ .service.write_timeout }}",
+    "idle_timeout": "{{ .service.idle_timeout }}",
+    "read_header_timeout": "{{ .service.read_header_timeout }}",
+    "max_idle_connections": {{ .service.max_idle_connections }},
+    "extra_config": {{ include "extra_config.tmpl" }},
+    "host": {{ marshal .service.default_hosts }},
+    "endpoints": [{{ template "Endpoint" .service }}]
+}

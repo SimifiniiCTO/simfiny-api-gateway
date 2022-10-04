@@ -1,0 +1,17 @@
+{
+    "version": 3,
+    "name": "Simfinii Backend API Gateway",
+    "port": 8080,
+    "cache_ttl": "3600s",
+    "timeout": "10s",
+    "read_timeout": "10s",
+    "write_timeout": "10s",
+    "idle_timeout": "10s",
+    "read_header_timeout": "10000ms",
+    "max_idle_connections": 150,
+    "default_hosts": [
+        "http://api-gateway-1.prod.svc.cluster.local:8080",
+        "http://api-gateway-2.prod.svc.cluster.local:8080",
+        "http://api-gateway-3.prod.svc.cluster.local:8080"
+    ]
+}
