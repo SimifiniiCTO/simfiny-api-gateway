@@ -1,0 +1,21 @@
+version: "3"
+services:
+  kraken_designer:
+    image: devopsfaith/krakendesigner:latest
+    ports:
+      - 8787:80
+    networks:
+      - backend-network
+  api-gateway:
+    image: devopsfaith/krakend:1.4.1
+    volumes:
+      - .:/etc/krakend
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    name: custom_network

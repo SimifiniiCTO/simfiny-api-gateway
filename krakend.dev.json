@@ -1,0 +1,424 @@
+{
+    "version": 3,
+    "name": "Simfinii Backend API Gateway",
+    "port": 8080,
+    "cache_ttl": "3600s",
+    "timeout": "3s",
+    "read_timeout": "3s",
+    "write_timeout": "3s",
+    "idle_timeout": "3s",
+    "read_header_timeout": "10ms",
+    "max_idle_connections": 150,
+    "host": [
+      "http://api-gateway.default.svc.local:8080"
+    ],
+    "extra_config": {
+      "github_com/devopsfaith/krakend-gologging": {
+        "level": "DEBUG",
+        "prefix": "[KRAKEND]",
+        "syslog": false,
+        "stdout": true
+      },
+      "github_com/devopsfaith/krakend-metrics": {
+        "collection_time": "60s",
+        "proxy_disabled": false,
+        "router_disabled": false,
+        "backend_disabled": false,
+        "endpoint_disabled": false,
+        "listen_address": ":8081"
+      },
+      "github_com/devopsfaith/krakend-cors": {
+        "allow_origins": [
+          "http://192.168.99.100:3000",
+          "http://localhost:3000",
+          "*"
+        ],
+        "allow_methods": [
+          "POST",
+          "GET"
+        ],
+        "allow_headers": [
+          "Origin",
+          "Authorization",
+          "Content-Type"
+        ],
+        "expose_headers": [
+          "Content-Length"
+        ],
+        "max_age": "12h"
+      },
+      "github.com/devopsfaith/krakend-ratelimit/juju/router": {
+        "maxRate": 50,
+        "clientMaxRate": 5,
+        "strategy": "ip"
+      },
+      "github_com/devopsfaith/krakend-opencensus": {
+        "exporters": {
+          "prometheus": {
+            "port": 8082,
+            "namespace": "krakend",
+            "tag_host": false,
+            "tag_path": true,
+            "tag_method": true,
+            "tag_statuscode": false
+          },
+          "logger": {
+            "stats": true,
+            "spans": true
+          }
+        }
+      },
+      "endpoints": [
+        {
+          "endpoint": "/v1/gateway/user",
+          "method": "POST",
+          "headers_to_pass": [
+            "*"
+          ],
+          "backend": [
+            {
+              "url_pattern": "/api/v1/user",
+              "host": [
+                "http://user-service.default.svc.local:9896"
+              ],
+              "method": "POST",
+              "extra_config": {
+                "github.com/devopsfaith/krakend-martian": {
+                  "fifo.Group": {
+                    "scope": [
+                      "request",
+                      "response"
+                    ],
+                    "aggregateErrors": true
+                  }
+                },
+                "github.com/devopsfaith/krakend-circuitbreaker/gobreaker": {
+                  "interval": 60,
+                  "timeout": 10,
+                  "maxErrors": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "endpoint": "/v1/gateway/user/setup/{userId}",
+          "method": "POST",
+          "headers_to_pass": [
+            "*"
+          ],
+          "backend": [
+            {
+              "host": [
+                "http://financial-integration-service.default.svc.local:9896"
+              ],
+              "url_pattern": "/api/v1/token/setup/{userId}",
+              "method": "POST",
+              "extra_config": {
+                "github.com/devopsfaith/krakend-martian": {
+                  "fifo.Group": {
+                    "scope": [
+                      "request",
+                      "response"
+                    ],
+                    "aggregateErrors": true
+                  }
+                },
+                "github.com/devopsfaith/krakend-circuitbreaker/gobreaker": {
+                  "interval": 60,
+                  "timeout": 10,
+                  "maxErrors": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "endpoint": "/v1/gateway/user/setup/{userId}",
+          "method": "POST",
+          "headers_to_pass": [
+            "*"
+          ],
+          "backend": [
+            {
+              "url_pattern": "/api/v1/user",
+              "host": [
+                "http://user-service.default.svc.local:9896"
+              ],
+              "method": "POST",
+              "extra_config": {
+                "github.com/devopsfaith/krakend-martian": {
+                  "fifo.Group": {
+                    "scope": [
+                      "request",
+                      "response"
+                    ],
+                    "aggregateErrors": true
+                  }
+                },
+                "github.com/devopsfaith/krakend-circuitbreaker/gobreaker": {
+                  "interval": 60,
+                  "timeout": 10,
+                  "maxErrors": 1
+                }
+              }
+            },
+            {
+              "host": [
+                "http://financial-integration-service.default.svc.local:9896"
+              ],
+              "url_pattern": "/api/v1/token/setup/{resp0_userID}",
+              "method": "POST",
+              "extra_config": {
+                "github.com/devopsfaith/krakend-martian": {
+                  "fifo.Group": {
+                    "scope": [
+                      "request",
+                      "response"
+                    ],
+                    "aggregateErrors": true
+                  }
+                },
+                "github.com/devopsfaith/krakend-circuitbreaker/gobreaker": {
+                  "interval": 60,
+                  "timeout": 10,
+                  "maxErrors": 1
+                }
+              }
+            }
+          ],
+          "extra_config": {
+            "proxy": {
+              "sequential": true
+            }
+          }
+        },
+        {
+          "endpoint": "/v1/gateway/user/token-exchange/{userID}/{publicToken}",
+          "headers_to_pass": [
+            "*"
+          ],
+          "method": "POST",
+          "backend": [
+            {
+              "url_pattern": "/api/v1/token/exchange/{userID}/{publicToken}",
+              "host": [
+                "http://financial-integration-service.default.svc.local:9896"
+              ],
+              "method": "POST",
+              "extra_config": {
+                "github.com/devopsfaith/krakend-martian": {
+                  "fifo.Group": {
+                    "scope": [
+                      "request",
+                      "response"
+                    ],
+                    "aggregateErrors": true
+                  }
+                },
+                "github.com/devopsfaith/krakend-circuitbreaker/gobreaker": {
+                  "interval": 60,
+                  "timeout": 10,
+                  "maxErrors": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "endpoint": "/v1/gateway/user/logout/{id}",
+          "headers_to_pass": [
+            "*"
+          ],
+          "method": "POST",
+          "backend": [
+            {
+              "url_pattern": "/api/v1/user/logout/{id}",
+              "host": [
+                "http://headless-authentication-service.default.svc.local:9896"
+              ],
+              "method": "POST",
+              "extra_config": {
+                "github.com/devopsfaith/krakend-martian": {
+                  "fifo.Group": {
+                    "scope": [
+                      "request",
+                      "response"
+                    ],
+                    "aggregateErrors": true
+                  }
+                },
+                "github.com/devopsfaith/krakend-circuitbreaker/gobreaker": {
+                  "interval": 60,
+                  "timeout": 10,
+                  "maxErrors": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "endpoint": "/v1/gateway/user/{id}",
+          "method": "DELETE",
+          "headers_to_pass": [
+            "*"
+          ],
+          "backend": [
+            {
+              "url_pattern": "/api/v1/user/{id}",
+              "host": [
+                "http://user-service.default.svc.local:9896"
+              ],
+              "method": "DELETE",
+              "extra_config": {
+                "github.com/devopsfaith/krakend-martian": {
+                  "fifo.Group": {
+                    "scope": [
+                      "request",
+                      "response"
+                    ],
+                    "aggregateErrors": true
+                  }
+                },
+                "github.com/devopsfaith/krakend-circuitbreaker/gobreaker": {
+                  "interval": 60,
+                  "timeout": 10,
+                  "maxErrors": 1
+                },
+                "github.com/devopsfaith/krakend-jose/validator": {
+                  "alg": "RS256",
+                  "audience": [
+                    "localhost"
+                  ],
+                  "cache": true,
+                  "jwk-url": "http://localhost:8000/jwks",
+                  "issuer": "http://localhost:8000"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "endpoint": "/v1/gateway/user/{id}",
+          "headers_to_pass": [
+            "*"
+          ],
+          "method": "GET",
+          "backend": [
+            {
+              "url_pattern": "/api/v1/user/{id}",
+              "host": [
+                "http://user-service.default.svc.local:9896"
+              ],
+              "method": "GET",
+              "extra_config": {
+                "github.com/devopsfaith/krakend-martian": {
+                  "fifo.Group": {
+                    "scope": [
+                      "request",
+                      "response"
+                    ],
+                    "aggregateErrors": true
+                  }
+                },
+                "github.com/devopsfaith/krakend-circuitbreaker/gobreaker": {
+                  "interval": 60,
+                  "timeout": 10,
+                  "maxErrors": 1
+                },
+                "github.com/devopsfaith/krakend-jose/validator": {
+                  "alg": "RS256",
+                  "audience": [
+                    "localhost"
+                  ],
+                  "cache": true,
+                  "jwk-url": "http://localhost:8000/jwks",
+                  "issuer": "http://localhost:8000"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "endpoint": "/v1/gateway/financials/{userID}/{virtualAccountID}",
+          "headers_to_pass": [
+            "*"
+          ],
+          "method": "GET",
+          "backend": [
+            {
+              "url_pattern": "/api/v1/accounts/user/{userID}/account/{virtualAccountID}",
+              "host": [
+                "http://financial-integration-service.default.svc.local:9896"
+              ],
+              "method": "GET",
+              "extra_config": {
+                "github.com/devopsfaith/krakend-martian": {
+                  "fifo.Group": {
+                    "scope": [
+                      "request",
+                      "response"
+                    ],
+                    "aggregateErrors": true
+                  }
+                },
+                "github.com/devopsfaith/krakend-circuitbreaker/gobreaker": {
+                  "interval": 60,
+                  "timeout": 10,
+                  "maxErrors": 1
+                },
+                "github.com/devopsfaith/krakend-jose/validator": {
+                  "alg": "RS256",
+                  "audience": [
+                    "localhost"
+                  ],
+                  "cache": true,
+                  "jwk-url": "http://localhost:8000/jwks",
+                  "issuer": "http://localhost:8000"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "endpoint": "/v1/gateway/user/login/{email}/{password}",
+          "method": "POST",
+          "headers_to_pass": [
+            "*"
+          ],
+          "backend": [
+            {
+              "url_pattern": "/api/v1/user?email={email}",
+              "host": [
+                "http://headless-authentication-service.default.svc.local:9896"
+              ],
+              "method": "GET",
+              "group": "userID"
+            },
+            {
+              "url_pattern": "/api/v1/account/user/{resp0_userID}",
+              "host": [
+                "http://financial-integration-service.default.svc.local:9896"
+              ],
+              "method": "GET",
+              "group": "virtualAccountID"
+            },
+            {
+              "url_pattern": "/v1/auth/user/login?email={email}?password={password}",
+              "host": [
+                "http://headless-authentication-service.default.svc.local:9896"
+              ],
+              "method": "POST",
+              "group": "token"
+            }
+          ],
+          "extra_config": {
+            "proxy": {
+              "sequential": true
+            }
+          }
+        }
+      ]
+    }
+  }
+  

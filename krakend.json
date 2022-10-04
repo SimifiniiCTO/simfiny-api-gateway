@@ -1,0 +1,354 @@
+{
+  "version": 3,
+  "name": "Simfinii Backend API Gateway",
+  "port": 8080,
+  "cache_ttl": "3600s",
+  "timeout": "10s",
+  "read_timeout": "10s",
+  "write_timeout": "10s",
+  "idle_timeout": "10s",
+  "read_header_timeout": "10000ms",
+  "max_idle_connections": 150,
+  "host": [
+    "http://api-gateway.prod.svc.cluster.local:8080"
+  ],
+  "extra_config": {
+    "router": {
+      "return_error_msg": true,
+      "forwarded_by_client_ip": true,
+      "disable_access_log": true
+    },
+    "telemetry/logging": {
+      "level": "INFO",
+      "prefix": "[SIMFINY API-GATEWAY]",
+      "syslog": false,
+      "stdout": true
+    },
+    "telemetry/opencensus": {
+      "exporters": {
+        "extra_config": {
+          "newrelic": {
+            "service_name": "simfiny-api-gateway",
+            "api_key": "62fd721c712d5863a4e75b8f547b7c1ea884NRAL",
+            "timeout": "15s",
+            "spans_url": "https://trace-api.newrelic.com/trace/v1",
+            "metrics_url": "https://metric-api.newrelic.com/metric/v1",
+            "debug": false
+          }
+        }
+      }
+    },
+    "telemetry/metrics": {
+      "collection_time": "60s",
+      "proxy_disabled": false,
+      "router_disabled": false,
+      "backend_disabled": false,
+      "endpoint_disabled": false,
+      "listen_address": ":8081"
+    },
+    "security/cors": {
+      "allow_origins": [
+        "http://192.168.99.100:3000",
+        "http://localhost:3000",
+        "*"
+      ],
+      "allow_methods": [
+        "GET",
+        "HEAD",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE",
+        "OPTIONS"
+      ],
+      "allow_headers": [
+        "*"
+      ],
+      "max_age": "12h"
+    }
+  },
+  "endpoints": [
+    {
+      "endpoint": "/v1/gateway/user",
+      "method": "POST",
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 50,
+          "client_max_rate": 5,
+          "strategy": "ip"
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/api/v1/user",
+          "host": [
+            "http://user-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "POST",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "timeout": 10,
+              "max_errors": 5,
+              "name": "user-service|[POST] /v1/gateway/user",
+              "log_status_change": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/gateway/user/setup/{userId}",
+      "method": "POST",
+      "backend": [
+        {
+          "host": [
+            "http://financial-integration-service.prod.svc.cluster.local:9896"
+          ],
+          "url_pattern": "/api/v1/token/setup/{userId}",
+          "method": "POST",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "timeout": 10,
+              "max_errors": 5,
+              "name": "fis-service|[POST] /v1/gateway/user/setup/{userId}",
+              "log_status_change": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/gateway/user/token-exchange/{userID}/{publicToken}",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/token/exchange/{userID}/{publicToken}",
+          "host": [
+            "http://financial-integration-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "POST",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "timeout": 10,
+              "max_errors": 5,
+              "name": "fis-service|[POST] /v1/gateway/user/token-exchange/{userID}/{publicToken}",
+              "log_status_change": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/gateway/user/logout/{id}",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/user/logout/{id}",
+          "host": [
+            "http://headless-authentication-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "POST",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "timeout": 10,
+              "max_errors": 5,
+              "name": "hdlss-auth-service|[POST] /v1/gateway/user/logout/{id}",
+              "log_status_change": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/gateway/user/{id}",
+      "method": "DELETE",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/user/{id}",
+          "host": [
+            "http://user-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "DELETE",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "timeout": 10,
+              "max_errors": 5,
+              "name": "user-service|[DELETE] /v1/gateway/user/{id}",
+              "log_status_change": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/gateway/user/{id}",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/user/{id}",
+          "host": [
+            "http://user-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "GET",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "timeout": 10,
+              "max_errors": 5,
+              "name": "user-service|[GET] /v1/gateway/user/{id}",
+              "log_status_change": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/gateway/financials/{userID}/{virtualAccountID}",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/accounts/user/{userID}/account/{virtualAccountID}",
+          "host": [
+            "http://financial-integration-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "GET",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "timeout": 10,
+              "max_errors": 5,
+              "name": "fis-service|[GET] /v1/gateway/financials/{userID}/{virtualAccountID}",
+              "log_status_change": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/gateway/user/login/{email}/{password}",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/user?email={email}",
+          "host": [
+            "http://user-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "GET",
+          "group": "userID"
+        },
+        {
+          "url_pattern": "/api/v1/account/user/{resp0_userID}",
+          "host": [
+            "http://financial-integration-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "GET",
+          "group": "virtualAccountID"
+        },
+        {
+          "url_pattern": "/v1/auth/user/login?email={email}?password={password}",
+          "host": [
+            "http://headless-authentication-service.prod.svc.cluster.local:9796"
+          ],
+          "method": "POST",
+          "group": "token",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "timeout": 10,
+              "max_errors": 5,
+              "name": "fis-service|[GET] /v1/gateway/financials/{userID}/{virtualAccountID}",
+              "log_status_change": true
+            }
+          }
+        }
+      ],
+      "extra_config": {
+        "proxy": {
+          "sequential": true
+        },
+        "qos/ratelimit/router": {
+          "max_rate": 50,
+          "client_max_rate": 10,
+          "strategy": "ip"
+        }
+      }
+    }
+  ]
+}

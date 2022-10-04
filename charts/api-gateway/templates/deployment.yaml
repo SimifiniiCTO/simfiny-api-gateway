@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "api-gateway.fullname" . }}
+  labels:
+    {{- include "api-gateway.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+        maxSurge: 2
+        maxUnavailable: 0
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "api-gateway.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "api-gateway.selectorLabels" . | nindent 8 }}
+    spec:
+      volumes:
+        - name: config
+          configMap:
+            name: {{ template "api-gateway.fullname" . }}-configmap
+        {{- if .Values.addlVolumes }}
+        {{- toYaml .Values.addlVolumes | nindent 8 }}
+        {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "api-gateway.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+      {{- if .Values.sidecar.enabled }}
+        - name: {{ .Values.sidecar.name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.sidecar.repository }}:{{ .Values.sidecar.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.sidecar.port }}
+              protocol: TCP
+      {{- end }}
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: [ "/usr/bin/krakend" ]
+          args: [ "run", "-d", "-c", "/etc/krakend/krakend.json", "-p", "8080" ]
+          env:
+          - name: KRAKEND_PORT
+            value: "8080"
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+            - name: metrics
+              containerPort: {{ .Values.service.metrics.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

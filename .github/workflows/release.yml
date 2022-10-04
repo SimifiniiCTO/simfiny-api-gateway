@@ -1,0 +1,178 @@
+name: release
+
+on:
+  push:
+    branches:
+      - "main"
+
+permissions:
+  contents: write # needed to write releases
+  id-token: write # needed for keyless signing
+  packages: write # needed for ghcr access
+
+jobs:
+  publish-artifacts:
+    strategy:
+      matrix:
+        helm-version:
+          - 3.8.1
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: sigstore/cosign-installer@main
+      - uses: fluxcd/flux2/action@main
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18.x
+      - name: Setup Helm
+        uses: ./.github/actions/helm
+        with:
+          version: 3.8.1
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v1
+        with:
+          platforms: all
+      - name: Setup Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.CLUSTER_NAME }}
+          password: ${{ secrets.SIMFINY_PERSONAL_TOKEN }}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Prepare
+        id: prep
+        run: |
+          HELM_VERSION=$(grep 'version:' ./charts/api-gateway/Chart.yaml | awk '{ print $2 }' | tr -d '"')
+          VERSION=sha-${GITHUB_SHA::8}
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF/refs\/tags\//}
+          fi
+          echo ::set-output name=BUILD_DATE::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+          echo ::set-output name=VERSION::${VERSION}
+          echo ::set-output name=REVISION::${GITHUB_SHA}
+          echo ::set-output name=HELM_VERSION::${HELM_VERSION}
+      - name: Validate Service Helm Chart
+        uses: stefanprodan/kube-tools@v1
+        with:
+          kubectl: 1.19.11
+          helm: 2.17.0
+          helmv3: 3.6.0
+          command: |
+            helmv3 template ./charts/api-gateway --set linkerd.profile.enabled=false --set hpa.enabled=false | kubeval --strict --kubernetes-version 1.19.11 --schema-location https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master
+      - name: Publish Helm chart to GHCR
+        run: |
+          HELM_EXPERIMENTAL_OCI=1
+          helm package charts/api-gateway --version ${{ steps.prep.outputs.HELM_VERSION }}
+          helm push api-gateway-${{ steps.prep.outputs.HELM_VERSION }}.tgz oci://ghcr.io/simifiniicto/charts
+          rm api-gateway-${{ steps.prep.outputs.HELM_VERSION }}.tgz
+      - name: Publish Flux OCI artifact to GHCR
+        run: |
+          flux push artifact oci://ghcr.io/simifiniicto/manifests/api-gateway:${{ steps.prep.outputs.HELM_VERSION }} \
+            --path="./kustomize" \
+            --source="${{ github.event.repository.html_url }}" \
+            --revision="${GITHUB_REF_NAME}/${GITHUB_SHA}"
+          flux tag artifact oci://ghcr.io/simifiniicto/manifests/api-gateway:${{ steps.prep.outputs.HELM_VERSION }} --tag latest
+      - name: Publish config artifact
+        run: |
+          flux push artifact oci://ghcr.io/simifiniicto/config/api-gateway-deploy:${{ steps.prep.outputs.HELM_VERSION }} \
+            --path="./kustomize" \
+            --source="${{ github.event.repository.html_url }}" \
+            --revision="${GITHUB_REF_NAME}/${GITHUB_SHA}"
+          flux tag artifact oci://ghcr.io/simifiniicto/config/api-gateway-deploy:${{ steps.prep.outputs.HELM_VERSION }} --tag latest
+      - name: Publish Service Helm Chart
+        uses: stefanprodan/helm-gh-pages@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          charts_dir: ./charts
+          target_dir: ./api-gateway
+          commit_username: yoanyombapro1234
+          commit_email: yoanyombapro@gmail.com                
+      - name: Generate images meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            docker.io/feelguuds/api-gateway
+            ghcr.io/SimifiniiCTO/api-gateway
+          tags: |
+            type=raw,value=${{ steps.prep.outputs.VERSION }}
+            type=raw,value=latest
+      - name: Publish Multi-Arch Image Social Service
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          builder: ${{ steps.buildx.outputs.name }}
+          context: .
+          file: ./Dockerfile
+          platforms:  linux/amd64
+          build-args: |
+            REVISION=${{ steps.prep.outputs.REVISION }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+      - name: Debug failure
+        if: failure()
+        run: |
+          kubectl logs -l app=api-gateway || true  
+
+  deploy:
+    needs: [publish-artifacts]
+    runs-on: ubuntu-latest
+    env:
+      working-directory: .
+      cluster: ${{ secrets.CLUSTER_NAME }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17.x
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v1
+        with:
+          platforms: all
+      - name: Setup Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          buildkitd-flags: "--debug"
+      - name: Update SHA
+        run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/sha/_meta
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_TOKEN }}
+      - name: Log in to DigitalOcean Container Registry with short-lived credentials
+        run: doctl registry login --expiry-seconds 600
+      - name: Save DigitalOcean kubeconfig with short-lived credentials
+        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{env.cluster}}
+      - name: Deploy to DigitalOcean Kubernetes
+        working-directory: ${{env.working-directory}}
+        run: ./deploy/deploy.sh -n prod
+
+  notes:
+    needs: [publish-artifacts, deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/release-notes
+      - name: Generate release notes
+        run: |
+          echo 'CHANGELOG' > /tmp/release.txt
+          github-release-notes -org simifiniicto -repo api-gateway -since-latest-release >> /tmp/release.txt
+      - name: Publish release
+        uses: goreleaser/goreleaser-action@v3
+        with:
+          version: latest
+          args: release --release-notes=/tmp/release.txt --skip-validate
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

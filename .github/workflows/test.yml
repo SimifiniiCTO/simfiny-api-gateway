@@ -1,0 +1,36 @@
+name: test
+
+on:
+  pull_request:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  validate:
+      strategy:
+        matrix:
+          helm-version:
+            - 3.8.1
+      runs-on: ubuntu-latest
+      container:
+        image: lucasalt/act_base:latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+        - name: Setup Helm
+          uses: ./.github/actions/helm
+          with:
+            version: 3.8.1
+        - name: Setup QEMU
+          uses: docker/setup-qemu-action@v1
+          with:
+            platforms: all
+        - name: Validate Api Gateway Helm Chart
+          uses: stefanprodan/kube-tools@v1
+          with:
+            kubectl: 1.19.11
+            helm: 2.17.0
+            helmv3: 3.6.0
+            command: |
+              helmv3 template ./charts/api-gateway | kubeval --strict --kubernetes-version 1.19.11 --schema-location https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master

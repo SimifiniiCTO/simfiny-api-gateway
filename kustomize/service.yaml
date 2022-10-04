@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: service
+  labels:
+    helm.sh/chart: podinfo-6.1.8
+    app.kubernetes.io/name: service
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/instance: service-xxx
+    app.kubernetes.io/version: "v0.0.1"
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/part-of: api-gateway
+    app.kubernetes.io/created-by: controller-manager
+    environment: dev # [dev, staging, prod]
+    tier: backend # [backend, frontend, cacher]
+    release: canary # [canary, stable]
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9898
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: 9896
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+  selector:
+    app: service

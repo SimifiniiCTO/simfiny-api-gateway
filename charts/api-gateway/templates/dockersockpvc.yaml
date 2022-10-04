@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: {{ .Values.sidecar.telemetry.volumes.docker.persistentVolumeClaimName }}
+  name: {{ .Values.sidecar.telemetry.volumes.docker.persistentVolumeClaimName }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: {}

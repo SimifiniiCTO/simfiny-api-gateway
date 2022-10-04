@@ -1,0 +1,21 @@
+apiVersion: skaffold/v2beta28
+kind: Config
+build:
+  artifacts:
+  - image: feelguuds/api-gateway
+    context: .
+    docker:
+      dockerfile: Dockerfile.dev
+      noCache: false
+  tagPolicy:
+    envTemplate:
+      template: "latest"
+
+deploy:
+  helm:
+    releases:
+    - name: api-gateway
+      chartPath: charts/api-gateway
+      skipBuildDependencies: true
+      valuesFiles:
+          - charts/api-gateway/values.yaml
