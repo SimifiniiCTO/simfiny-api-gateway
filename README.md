@@ -1,5 +1,6 @@
 ##  API Call Patterns
 
+ref: https://medium.com/@isikakin95/simpleapp-krakend-api-gateway-templates-part-ii-187685599079
 ### Create Account
 Call Sequence:
 1) Client hit the api gateway with payload
