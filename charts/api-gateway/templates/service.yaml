@@ -17,6 +17,5 @@ spec:
       protocol: TCP
       name: metrics
       nodePort: {{ .Values.service.metrics.nodeport }}
-    {{- end }}
   selector:
     {{- include "api-gateway.selectorLabels" . | nindent 4 }}
