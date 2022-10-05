@@ -163,7 +163,7 @@ jobs:
       - name: Generate release notes
         run: |
           echo 'CHANGELOG' > /tmp/release.txt
-          github-release-notes -org simifiniicto -repo simfiny-api-gateway -since-latest-release >> /tmp/release.txt
+          github-release-notes -org SimifiniiCTO -repo simfiny-api-gateway -since-latest-release >> /tmp/release.txt
       - name: Publish release
         uses: goreleaser/goreleaser-action@v3
         with:
