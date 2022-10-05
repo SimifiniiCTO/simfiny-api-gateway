@@ -159,11 +159,6 @@ jobs:
       - name: Deploy to DigitalOcean Kubernetes
         working-directory: ${{env.working-directory}}
         run: ./deploy/deploy.sh -n prod
-
-  notes:
-    needs: [publish-artifacts, deploy]
-    runs-on: ubuntu-latest
-    steps:
       - uses: ./.github/actions/release-notes
       - name: Generate release notes
         run: |
