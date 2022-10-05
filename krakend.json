@@ -11,11 +11,25 @@
   "max_idle_connections": 150,
   "extra_config": {
     "documentation/openapi": {
-      "version": "1",
-      "contact_name": "Yoan Yomba",
-      "contact_email": "yoan@simfinii.com",
+      "description": "This is the api gateway for the simfiny backend",
+      "version": "1.0.0",
+      "host": "simfiny.io",
+      "base_path": "/v1",
+      "terms_of_service": "http://url.to/tos",
+      "contact_name": "yoan yomba",
+      "contact_email": "yoan@simfiny.com",
+      "contact_url": "https://simfiny.io/developers",
       "license_name": "MIT",
-      "license_url": "https://opensource.org/licenses/MIT"
+      "license_url": "https://opensource.org/licenses/MIT",
+      "tags": [
+        "platform",
+        "fin-tech",
+        "Restricted"
+      ],
+      "schemes": [
+        "http",
+        "https"
+      ]
     },
     "router": {
       "return_error_msg": true,
@@ -123,6 +137,11 @@
           "max_rate": 1000,
           "client_max_rate": 1000,
           "strategy": "ip"
+        },
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://authentication-service.prod.svc.cluster/jwks",
+          "cache": true
         }
       },
       "backend": [
@@ -160,6 +179,11 @@
           "max_rate": 1000,
           "client_max_rate": 1000,
           "strategy": "ip"
+        },
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://authentication-service.prod.svc.cluster/jwks",
+          "cache": true
         }
       },
       "backend": [
@@ -197,6 +221,11 @@
           "max_rate": 1000,
           "client_max_rate": 1000,
           "strategy": "ip"
+        },
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://authentication-service.prod.svc.cluster/jwks",
+          "cache": true
         }
       },
       "backend": [
@@ -234,6 +263,11 @@
           "max_rate": 1000,
           "client_max_rate": 1000,
           "strategy": "ip"
+        },
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://authentication-service.prod.svc.cluster/jwks",
+          "cache": true
         }
       },
       "backend": [
@@ -271,6 +305,11 @@
           "max_rate": 1000,
           "client_max_rate": 1000,
           "strategy": "ip"
+        },
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://authentication-service.prod.svc.cluster/jwks",
+          "cache": true
         }
       },
       "backend": [
@@ -308,6 +347,11 @@
           "max_rate": 1000,
           "client_max_rate": 1000,
           "strategy": "ip"
+        },
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://authentication-service.prod.svc.cluster/jwks",
+          "cache": true
         }
       },
       "backend": [
@@ -348,6 +392,11 @@
         },
         "proxy": {
           "sequential": true
+        },
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://authentication-service.prod.svc.cluster/jwks",
+          "cache": true
         }
       },
       "backend": [

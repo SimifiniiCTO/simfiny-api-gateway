@@ -26,7 +26,8 @@
     "endpoint":"/v1/gateway/user/setup/{userId}",
     "method":"POST",
     "extra_config":{
-    {{ include "rate_limit_endpoint.tmpl" }}
+        {{ include "rate_limit_endpoint.tmpl" }},
+        {{ include "validator_endpoint.tmpl" }}
     },
     "backend":[
     {
@@ -46,7 +47,8 @@
     "endpoint":"/v1/gateway/user/token-exchange/{userID}/{publicToken}",
     "method":"POST",
     "extra_config":{
-    {{ include "rate_limit_endpoint.tmpl" }}
+        {{ include "rate_limit_endpoint.tmpl" }},
+        {{ include "validator_endpoint.tmpl" }}
     },
     "backend":[
     {
@@ -66,7 +68,8 @@
     "endpoint":"/v1/gateway/user/logout/{id}",
     "method":"POST",
     "extra_config":{
-        {{ include "rate_limit_endpoint.tmpl" }}
+        {{ include "rate_limit_endpoint.tmpl" }},
+        {{ include "validator_endpoint.tmpl" }}
     },
     "backend":[
         {
@@ -86,7 +89,8 @@
     "endpoint":"/v1/gateway/user/{id}",
     "method":"DELETE",
     "extra_config":{
-    {{ include "rate_limit_endpoint.tmpl" }}
+        {{ include "rate_limit_endpoint.tmpl" }},
+        {{ include "validator_endpoint.tmpl" }}
     },
     "backend":[
     {
@@ -106,7 +110,8 @@
     "endpoint":"/v1/gateway/user/{id}",
     "method":"GET",
     "extra_config":{
-    {{ include "rate_limit_endpoint.tmpl" }}
+        {{ include "rate_limit_endpoint.tmpl" }},
+        {{ include "validator_endpoint.tmpl" }}
     },
     "backend":[
     {
@@ -126,7 +131,8 @@
     "endpoint":"/v1/gateway/financials/{userID}/{virtualAccountID}",
     "method":"GET",
     "extra_config":{
-    {{ include "rate_limit_endpoint.tmpl" }}
+        {{ include "rate_limit_endpoint.tmpl" }},
+        {{ include "validator_endpoint.tmpl" }}
     },
     "backend":[
     {
@@ -146,8 +152,9 @@
     "endpoint":"/v1/gateway/user/login/{email}/{password}",
     "method":"POST",
     "extra_config":{
-    {{ include "rate_limit_endpoint.tmpl" }},
-    {{ include "sequential_endpoint.tmpl" }}
+        {{ include "rate_limit_endpoint.tmpl" }},
+        {{ include "sequential_endpoint.tmpl" }},
+        {{ include "validator_endpoint.tmpl" }}
     },
     "backend":[
         {
