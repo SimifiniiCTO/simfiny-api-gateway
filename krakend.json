@@ -138,11 +138,6 @@
           "max_rate": 1000,
           "client_max_rate": 1000,
           "strategy": "ip"
-        },
-        "auth/validator": {
-          "alg": "RS256",
-          "jwk_url": "http://authentication-service.prod.svc.cluster/jwks",
-          "cache": true
         }
       },
       "backend": [
@@ -181,11 +176,6 @@
           "max_rate": 1000,
           "client_max_rate": 1000,
           "strategy": "ip"
-        },
-        "auth/validator": {
-          "alg": "RS256",
-          "jwk_url": "http://authentication-service.prod.svc.cluster/jwks",
-          "cache": true
         }
       },
       "backend": [
