@@ -39,7 +39,7 @@
     "telemetry/logging": {
       "level": "INFO",
       "prefix": "[SIMFINY API-GATEWAY]",
-      "syslog": false,
+      "syslog": true,
       "stdout": true
     },
     "telemetry/opencensus": {
@@ -399,13 +399,6 @@
           "url_pattern": "/api/v1/user?email={email}",
           "host": [
             "http://user-service.prod.svc.cluster.local:9896"
-          ],
-          "method": "GET"
-        },
-        {
-          "url_pattern": "/api/v1/account/user/{resp0_userID}",
-          "host": [
-            "http://financial-integration-service.prod.svc.cluster.local:9896"
           ],
           "method": "GET"
         },
