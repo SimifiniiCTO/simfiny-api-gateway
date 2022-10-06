@@ -161,7 +161,16 @@
             "host":[
                 "http://user-service.prod.svc.cluster.local:9896"
             ],
-            "method":"GET"
+            "method":"GET",
+            "group":"userID"
+        },
+        {
+          "url_pattern": "/api/v1/account/user/{resp0_userID}",
+          "host": [
+            "http://financial-integration-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "GET",
+          "group": "virtualAccountID"
         },
         {
             "url_pattern":"/v1/auth/user/login?email={email}?password={password}",
@@ -169,6 +178,7 @@
                 "http://headless-authentication-service.prod.svc.cluster.local:9796"
             ],
             "method":"POST",
+            "group": "token",
             "extra_config":{
                 {{ include "modifier_backend.tmpl" }},
                 {{ include "circuit_breaker_backend.tmpl" }}

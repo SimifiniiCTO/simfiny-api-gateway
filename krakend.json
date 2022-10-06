@@ -123,7 +123,8 @@
               "interval": 30,
               "timeout": 5,
               "max_errors": 5,
-              "log_status_change": true
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
             }
           }
         }
@@ -165,7 +166,8 @@
               "interval": 30,
               "timeout": 5,
               "max_errors": 5,
-              "log_status_change": true
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
             }
           }
         }
@@ -207,7 +209,8 @@
               "interval": 30,
               "timeout": 5,
               "max_errors": 5,
-              "log_status_change": true
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
             }
           }
         }
@@ -249,7 +252,8 @@
               "interval": 30,
               "timeout": 5,
               "max_errors": 5,
-              "log_status_change": true
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
             }
           }
         }
@@ -291,7 +295,8 @@
               "interval": 30,
               "timeout": 5,
               "max_errors": 5,
-              "log_status_change": true
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
             }
           }
         }
@@ -333,7 +338,8 @@
               "interval": 30,
               "timeout": 5,
               "max_errors": 5,
-              "log_status_change": true
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
             }
           }
         }
@@ -375,7 +381,8 @@
               "interval": 30,
               "timeout": 5,
               "max_errors": 5,
-              "log_status_change": true
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
             }
           }
         }
@@ -400,7 +407,16 @@
           "host": [
             "http://user-service.prod.svc.cluster.local:9896"
           ],
-          "method": "GET"
+          "method": "GET",
+          "group": "userID"
+        },
+        {
+          "url_pattern": "/api/v1/account/user/{resp0_userID}",
+          "host": [
+            "http://financial-integration-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "GET",
+          "group": "virtualAccountID"
         },
         {
           "url_pattern": "/v1/auth/user/login?email={email}?password={password}",
@@ -408,6 +424,7 @@
             "http://headless-authentication-service.prod.svc.cluster.local:9796"
           ],
           "method": "POST",
+          "group": "token",
           "extra_config": {
             "modifier/martian": {
               "fifo.Group": {
@@ -422,7 +439,8 @@
               "interval": 30,
               "timeout": 5,
               "max_errors": 5,
-              "log_status_change": true
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
             }
           }
         }
