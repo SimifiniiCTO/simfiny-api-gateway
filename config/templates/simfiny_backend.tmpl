@@ -26,8 +26,7 @@
     "endpoint":"/v1/gateway/user/setup/{userId}",
     "method":"POST",
     "extra_config":{
-        {{ include "rate_limit_endpoint.tmpl" }},
-        {{ include "validator_endpoint.tmpl" }}
+        {{ include "rate_limit_endpoint.tmpl" }}
     },
     "backend":[
     {
@@ -47,8 +46,7 @@
     "endpoint":"/v1/gateway/user/token-exchange/{userID}/{publicToken}",
     "method":"POST",
     "extra_config":{
-        {{ include "rate_limit_endpoint.tmpl" }},
-        {{ include "validator_endpoint.tmpl" }}
+        {{ include "rate_limit_endpoint.tmpl" }}
     },
     "backend":[
     {
