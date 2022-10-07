@@ -1,9 +1,10 @@
+on:
+  push:
+    branches:
+      - "main"
 
-on: 
-  release:
-    types: [created, edited]
 
-name: Milestone Closure
+name: Changelog
 jobs:
   changelog:
     runs-on: ubuntu-latest
