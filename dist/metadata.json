@@ -1,1 +1,1 @@
-{"project_name":"simfiny-api-gateway","tag":"v1.0.2","previous_tag":"v1.0.1","version":"1.0.2-SNAPSHOT-a20a265","commit":"a20a265cf75e127d1c4f0241f5191a885be1b16b","date":"2022-10-07T15:21:55.940074-04:00","runtime":{"goos":"darwin","goarch":"amd64"}}
+{"project_name":"simfiny-api-gateway","tag":"v1.0.2","previous_tag":"v1.0.1","version":"1.0.2-SNAPSHOT-d172d29","commit":"d172d2934b5e04bb8ccfaf2589d7b7cf1306b768","date":"2022-10-07T15:28:49.566105-04:00","runtime":{"goos":"darwin","goarch":"amd64"}}
