@@ -1,4 +1,9 @@
 changelog:
+  sections:
+  - title: "Enhancements"
+    labels: ["feat"]
+  - title: "Bugs"
+    labels: ["fix"]
   exclude:
     labels:
       - ignore-for-release
