@@ -185,23 +185,6 @@
             }
         }
     ]
-},
-{
-    "endpoint":"/v1/gateway/auth/login/{email}/{password}",
-    "method":"POST",
-    "extra_config":{
-        {{ include "rate_limit_endpoint.tmpl" }}
-    },
-    "backend":[
-        {
-            "url_pattern":"/api/v1/user/login?email={email}&password={password}",
-            "host":[
-                "http://headless-authentication-service.prod.svc.cluster.local:9796"
-            ],
-            "method":"POST"
-        }
-    ]
 }
-
 
 {{end}}

@@ -165,7 +165,7 @@
               "name": "simfiny-circuit-breaker"
             },
             "backend/http": {
-              "return_error_details": "details"
+              "return_error_details": "message"
             }
           }
         }
@@ -206,7 +206,7 @@
               "name": "simfiny-circuit-breaker"
             },
             "backend/http": {
-              "return_error_details": "details"
+              "return_error_details": "message"
             }
           }
         }
@@ -252,7 +252,7 @@
               "name": "simfiny-circuit-breaker"
             },
             "backend/http": {
-              "return_error_details": "details"
+              "return_error_details": "message"
             }
           }
         }
@@ -298,7 +298,7 @@
               "name": "simfiny-circuit-breaker"
             },
             "backend/http": {
-              "return_error_details": "details"
+              "return_error_details": "message"
             }
           }
         }
@@ -344,7 +344,7 @@
               "name": "simfiny-circuit-breaker"
             },
             "backend/http": {
-              "return_error_details": "details"
+              "return_error_details": "message"
             }
           }
         }
@@ -390,7 +390,7 @@
               "name": "simfiny-circuit-breaker"
             },
             "backend/http": {
-              "return_error_details": "details"
+              "return_error_details": "message"
             }
           }
         }
@@ -434,7 +434,7 @@
               "name": "simfiny-circuit-breaker"
             },
             "backend/http": {
-              "return_error_details": "details"
+              "return_error_details": "message"
             }
           }
         },
@@ -462,29 +462,9 @@
               "name": "simfiny-circuit-breaker"
             },
             "backend/http": {
-              "return_error_details": "details"
+              "return_error_details": "message"
             }
           }
-        }
-      ]
-    },
-    {
-      "endpoint": "/v1/gateway/auth/login/{email}/{password}",
-      "method": "POST",
-      "extra_config": {
-        "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
-          "strategy": "ip"
-        }
-      },
-      "backend": [
-        {
-          "url_pattern": "/api/v1/user/login?email={email}&password={password}",
-          "host": [
-            "http://headless-authentication-service.prod.svc.cluster.local:9796"
-          ],
-          "method": "POST"
         }
       ]
     }
