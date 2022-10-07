@@ -10,7 +10,7 @@ builds:
   skip: true
 dockers:
 - image_templates: ["ghcr.io/simifiniicto/{{ .ProjectName }}:{{ .Version }}-amd64"]
-  dockerfile: Dockerfile
+  dockerfile: goreleaser.Dockerfile
   use: buildx
   build_flag_templates:
   - --platform=linux/amd64
@@ -24,7 +24,7 @@ dockers:
   - --label=org.opencontainers.image.licenses=MIT
 - image_templates: ["ghcr.io/simifiniicto/{{ .ProjectName }}:{{ .Version }}-arm64v8"]
   goarch: arm64
-  dockerfile: Dockerfile
+  dockerfile: goreleaser.Dockerfile
   use: buildx
   build_flag_templates:
   - --platform=linux/arm64/v8
