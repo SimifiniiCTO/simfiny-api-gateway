@@ -161,25 +161,18 @@
     },
     "backend":[
         {
-            "url_pattern":"/api/v1/user/login?email={email}&password={password}",
-            "host":[
-                "http://headless-authentication-service.prod.svc.cluster.local:9796"
-            ],
-            "method":"POST",
-            "group": "token",
-            "extra_config":{
-                {{ include "modifier_backend.tmpl" }},
-                {{ include "circuit_breaker_backend.tmpl" }},
-                {{ include "error_detail_backend.tmpl" }}
-            }
-        },
-        {
             "url_pattern":"/api/v1/user?email={email}",
             "host":[
                 "http://user-service.prod.svc.cluster.local:9896"
             ],
-            "method":"GET",
-            "group":"userID"
+            "method":"GET"
+        },
+        {
+            "url_pattern":"/api/v1/user/login?email={email}&password={password}",
+            "host":[
+                "http://headless-authentication-service.prod.svc.cluster.local:9796"
+            ],
+            "method":"POST"
         }
     ]
 }
