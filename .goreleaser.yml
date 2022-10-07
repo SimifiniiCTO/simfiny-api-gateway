@@ -37,7 +37,7 @@ dockers:
   - --label=org.opencontainers.image.revision={{ .FullCommit }}
   - --label=org.opencontainers.image.licenses=MIT
 docker_manifests:
-- skip_push: "false"
+- skip_push: "true"
 - name_template: ghcr.io/simifiniicto/{{ .ProjectName }}:{{ .Version }}
   image_templates:
   - ghcr.io/simifiniicto/{{ .ProjectName }}:{{ .Version }}-amd64
