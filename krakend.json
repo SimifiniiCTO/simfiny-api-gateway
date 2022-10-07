@@ -411,14 +411,6 @@
       },
       "backend": [
         {
-          "url_pattern": "/api/v1/user?email={email}",
-          "host": [
-            "http://user-service.prod.svc.cluster.local:9896"
-          ],
-          "method": "GET",
-          "group": "userID"
-        },
-        {
           "url_pattern": "/api/v1/user/login?email={email}&password={password}",
           "host": [
             "http://headless-authentication-service.prod.svc.cluster.local:9796"
@@ -446,6 +438,14 @@
               "return_error_details": "details"
             }
           }
+        },
+        {
+          "url_pattern": "/api/v1/user?email={email}",
+          "host": [
+            "http://user-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "GET",
+          "group": "userID"
         }
       ]
     }
