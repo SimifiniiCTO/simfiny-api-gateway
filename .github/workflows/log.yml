@@ -29,8 +29,6 @@ jobs:
           test: Tests
           chore: Chores
           other: Other Changes
-        default-commit-type: Other Changes
         mention-authors: true
         mention-new-contributors: true
         include-compare: true
-        semver: true
