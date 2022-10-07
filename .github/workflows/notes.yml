@@ -1,8 +1,9 @@
 name: 'release notes'
 on:
   push:
-    tags:
-      - '*'
+    branches:
+      - "*"
+
 
 jobs:
   release:
