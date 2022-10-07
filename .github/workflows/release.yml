@@ -168,6 +168,6 @@ jobs:
         uses: goreleaser/goreleaser-action@v3
         with:
           version: latest
-          args: release --release-notes=/tmp/release.txt --skip-validate
+          args: release --release-notes=/tmp/release.txt --skip-validate --rm-dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
