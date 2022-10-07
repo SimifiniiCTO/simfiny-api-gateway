@@ -415,8 +415,70 @@
           "host": [
             "http://user-service.prod.svc.cluster.local:9896"
           ],
-          "method": "GET"
+          "method": "GET",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 30,
+              "timeout": 5,
+              "max_errors": 5,
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
+            },
+            "backend/http": {
+              "return_error_details": "details"
+            }
+          }
         },
+        {
+          "url_pattern": "/api/v1/user/login?email={email}&password={password}",
+          "host": [
+            "http://headless-authentication-service.prod.svc.cluster.local:9796"
+          ],
+          "method": "POST",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 30,
+              "timeout": 5,
+              "max_errors": 5,
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
+            },
+            "backend/http": {
+              "return_error_details": "details"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/gateway/auth/login/{email}/{password}",
+      "method": "POST",
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 1000,
+          "client_max_rate": 1000,
+          "strategy": "ip"
+        }
+      },
+      "backend": [
         {
           "url_pattern": "/api/v1/user/login?email={email}&password={password}",
           "host": [
