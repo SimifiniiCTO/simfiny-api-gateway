@@ -1,0 +1,79 @@
+{{define "authorization"}}
+{{$host := .}}
+{
+    "endpoint":"/v1/gateway/user/registration",
+    "method":"POST",
+    "extra_config":{
+    {{ include "rate_limit_endpoint.tmpl" }}
+    },
+    "backend":[
+    {
+        "url_pattern":"/api/v1/user",
+        "host":[
+            "http://user-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"POST",
+        "extra_config":{
+            {{ include "modifier_backend.tmpl" }},
+            {{ include "circuit_breaker_backend.tmpl" }}
+        }
+    }
+    ]
+},
+{
+    "endpoint":"/v1/gateway/user/logout/{id}",
+    "method":"POST",
+    "extra_config":{
+        {{ include "rate_limit_endpoint.tmpl" }},
+        {{ include "validator_endpoint.tmpl" }}
+    },
+    "backend":[
+        {
+            "url_pattern":"/api/v1/user/logout/{id}",
+            "host":[
+                "http://headless-authentication-service.prod.svc.cluster.local:9896"
+            ],
+            "method":"POST",
+            "extra_config":{
+                {{ include "modifier_backend.tmpl" }},
+                {{ include "circuit_breaker_backend.tmpl" }},
+                {{ include "error_detail_backend.tmpl" }}
+            }
+        }
+    ]
+},
+{
+    "endpoint":"/v1/gateway/user/login/{email}/{password}",
+    "method":"POST",
+    "extra_config":{
+        {{ include "rate_limit_endpoint.tmpl" }},
+        {{ include "sequential_endpoint.tmpl" }}
+    },
+    "backend":[
+        {
+            "url_pattern":"/api/v1/user?email={email}",
+            "host":[
+                "http://user-service.prod.svc.cluster.local:9896"
+            ],
+            "method":"GET",
+            "extra_config":{
+                {{ include "modifier_backend.tmpl" }},
+                {{ include "circuit_breaker_backend.tmpl" }},
+                {{ include "error_detail_backend.tmpl" }}
+            }
+        },
+        {
+            "url_pattern":"/api/v1/user/login?email={email}&password={password}",
+            "host":[
+                "http://headless-authentication-service.prod.svc.cluster.local:9796"
+            ],
+            "method":"POST",
+            "extra_config":{
+                {{ include "modifier_backend.tmpl" }},
+                {{ include "circuit_breaker_backend.tmpl" }},
+                {{ include "error_detail_backend.tmpl" }}
+            }
+        }
+    ]
+}
+{{end}}
