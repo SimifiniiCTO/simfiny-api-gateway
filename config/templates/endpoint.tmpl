@@ -2,6 +2,8 @@
 
 {{$service := .}}
 
-{{ template "SimfinyBackend" $service.simfinybackend }}
-
+{{ template "authorization" $service.endpoint }},
+{{ template "user" $service.endpoint }},
+{{ template "social" $service.endpoint }},
+{{ template "financials" $service.endpoint }}
 {{end}}
