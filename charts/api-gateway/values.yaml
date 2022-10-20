@@ -96,3 +96,12 @@ sidecar:
   repository: devopsfaith/krakendesigner
   tag: "latest"
   port: 80
+
+linkerd:
+  profile:
+    enabled: true
+  annotations:
+    linkerd.io/inject: enabled # Controls whether or not a pod should be injected; accepted values are enabled, disabled and ingress
+    config.linkerd.io/access-log: json
+    config.linkerd.io/proxy-log-format: json
+    config.linkerd.io/proxy-log-level: warn
