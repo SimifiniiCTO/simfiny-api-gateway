@@ -8,7 +8,7 @@ image:
   repository: feelguuds/api-gateway
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: sha-aad8df1a
+  tag: sha-6ddafc93
 
 imagePullSecrets: []
 nameOverride: ""
@@ -94,3 +94,12 @@ sidecar:
   repository: devopsfaith/krakendesigner
   tag: "latest"
   port: 80
+
+linkerd:
+  profile:
+    enabled: true
+  annotations:
+    linkerd.io/inject: enabled # Controls whether or not a pod should be injected; accepted values are enabled, disabled and ingress
+    config.linkerd.io/access-log: json
+    config.linkerd.io/proxy-log-format: json
+    config.linkerd.io/proxy-log-level: warn

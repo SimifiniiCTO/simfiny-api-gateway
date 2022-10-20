@@ -1,0 +1,26 @@
+{{- if .Values.linkerd.profile.enabled -}}
+apiVersion: linkerd.io/v1alpha2
+kind: ServiceProfile
+metadata:
+  name: {{ template "api-gateway.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+  labels:
+    {{- include "api-gateway.labels" . | nindent 4 }}  
+spec:
+  routes:
+    - condition:
+        method: POST
+        pathRegex: /v1/gateway/user/registration
+      name: POST /v1/gateway/user/registration
+    - condition:
+        method: POST
+        pathRegex: /v1/gateway/user/logout/[^/]*
+      name: POST /v1/gateway/user/logout/{id}
+    - condition:
+        method: POST
+        pathRegex: /v1/gateway/user/login/[^/]*/[^/]*
+      name: POST /v1/gateway/user/login/{email}/{password}
+    - condition:
+        method: DELETE
+        pathRegex: /v1/gateway/user/[^/]*
+      name: DELETE /v1/gateway/user/{id}
+{{- end }}

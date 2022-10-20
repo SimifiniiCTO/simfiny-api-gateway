@@ -11,17 +11,22 @@ spec:
   strategy:
     type: RollingUpdate
     rollingUpdate:
-        maxSurge: 2
-        maxUnavailable: 0
+      maxSurge: 2
+      maxUnavailable: 0
   selector:
     matchLabels:
       {{- include "api-gateway.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- range $key, $value := .Values.podAnnotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- if .Values.linkerd.profile.enabled }}
+        {{- range $key, $value := .Values.linkerd.annotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
       labels:
         {{- include "api-gateway.selectorLabels" . | nindent 8 }}
     spec:
