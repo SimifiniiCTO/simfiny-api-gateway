@@ -65,13 +65,13 @@ ingress:
 
 resources:
   limits:
-    memory: "256Mi"
+    memory: "512Mi"
   requests:
     cpu: "100m"
     memory: "64Mi"
 
 autoscaling:
-  enabled: true
+  enabled: false
   minReplicas: 3
   maxReplicas: 5
   targetCPUUtilizationPercentage: 95
