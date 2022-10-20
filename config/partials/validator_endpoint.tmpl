@@ -1,5 +1,9 @@
 "auth/validator": {
     "alg": "RS256",
     "jwk_url": "http://authentication-service.prod.svc.cluster/jwks",
-    "cache": true
+    "cache": true,
+    "disable_jwk_security": true,
+    "propagate_claims": [
+        ["sub", "x-user-authn-id"]
+    ] 
 }
