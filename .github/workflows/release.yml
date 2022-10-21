@@ -51,10 +51,7 @@ jobs:
         id: prep
         run: |
           HELM_VERSION=$(grep 'version:' ./charts/api-gateway/Chart.yaml | awk '{ print $2 }' | tr -d '"')
-          VERSION=sha-${GITHUB_SHA::8}
-          if [[ $GITHUB_REF == refs/tags/* ]]; then
-            VERSION=${GITHUB_REF/refs\/tags\//}
-          fi
+          VERSION=${GITHUB_REF/refs\/tags\//}
           echo ::set-output name=BUILD_DATE::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
           echo ::set-output name=VERSION::${VERSION}
           echo ::set-output name=REVISION::${GITHUB_SHA}
@@ -94,7 +91,7 @@ jobs:
           charts_dir: ./charts
           target_dir: ./api-gateway
           commit_username: yoanyombapro1234
-          commit_email: yoanyombapro@gmail.com                
+          commit_email: yoanyombapro@gmail.com
       - name: Generate images meta
         id: meta
         uses: docker/metadata-action@v4
@@ -112,7 +109,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
           file: ./Dockerfile
-          platforms:  linux/amd64
+          platforms: linux/amd64
           build-args: |
             REVISION=${{ steps.prep.outputs.REVISION }}
           tags: ${{ steps.meta.outputs.tags }}
@@ -120,7 +117,7 @@ jobs:
       - name: Debug failure
         if: failure()
         run: |
-          kubectl logs -l app=api-gateway || true  
+          kubectl logs -l app=api-gateway || true
 
   deploy:
     needs: [publish-artifacts]
@@ -201,12 +198,12 @@ jobs:
     needs: [publish-artifacts, deploy, release-notes]
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v3
-      with:
-        ref: ${{ github.event.pull_request.head.sha }}
-        fetch-depth: '0'
-    - name: Bump version and push tag
-      uses: anothrNick/github-tag-action@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        WITH_V: true
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: "0"
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
