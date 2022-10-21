@@ -19,6 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: sigstore/cosign-installer@main
       - uses: fluxcd/flux2/action@main
       - name: Setup Go
@@ -51,7 +53,10 @@ jobs:
         id: prep
         run: |
           HELM_VERSION=$(grep 'version:' ./charts/api-gateway/Chart.yaml | awk '{ print $2 }' | tr -d '"')
-          VERSION=${GITHUB_REF/refs\/tags\//}
+          VERSION=sha-${GITHUB_SHA::8}
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF/refs\/tags\//}
+          fi
           echo ::set-output name=BUILD_DATE::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
           echo ::set-output name=VERSION::${VERSION}
           echo ::set-output name=REVISION::${GITHUB_SHA}
@@ -92,6 +97,17 @@ jobs:
           target_dir: ./api-gateway
           commit_username: yoanyombapro1234
           commit_email: yoanyombapro@gmail.com
+      # get github action tags
+      - name: "Get Previous tag"
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        with:
+          fallback: 1.0.0 # Optional fallback tag to use when no tag can be found
+      - name: "Get next minor version"
+        id: semvers
+        uses: "WyriHaximus/github-action-next-semvers@v1"
+        with:
+          version: ${{ steps.previoustag.outputs.tag }}
       - name: Generate images meta
         id: meta
         uses: docker/metadata-action@v4
@@ -102,6 +118,7 @@ jobs:
           tags: |
             type=raw,value=${{ steps.prep.outputs.VERSION }}
             type=raw,value=latest
+            type=raw,value=${{ steps.semvers.outputs.patch }}
       - name: Publish Multi-Arch Image Social Service
         uses: docker/build-push-action@v2
         with:
