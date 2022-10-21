@@ -1,18 +1,15 @@
 {{define "social"}}
 {{$host := .}}
 {
-    "endpoint":"/v1/gateway/social/community",
+    "endpoint":"/v1/gateway/social/user/{userID}/community",
     "method":"GET",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
         {{ include "validator_endpoint.tmpl" }}
     },
-    "input_query_strings": [
-        "userID"
-    ],
     "backend":[
     {
-        "url_pattern":"/v1/social/community",
+        "url_pattern":"/v1/social/community?userID={userID}",
         "host":[
             "http://social-service.prod.svc.cluster.local:9896"
         ],
@@ -26,18 +23,15 @@
     ]
 },
 {
-    "endpoint":"/v1/gateway/social/community",
+    "endpoint":"/v1/gateway/social/user/{userID}/community",
     "method":"POST",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
         {{ include "validator_endpoint.tmpl" }}
     },
-    "input_query_strings": [
-        "userID"
-    ],
     "backend":[
     {
-        "url_pattern":"/v1/social/community",
+        "url_pattern":"/v1/social/community?userID={userID}",
         "host":[
             "http://social-service.prod.svc.cluster.local:9896"
         ],
@@ -51,18 +45,15 @@
     ]
 },
 {
-    "endpoint":"/v1/gateway/social/community",
+    "endpoint":"/v1/gateway/social/user/{userID}/community",
     "method":"PUT",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
         {{ include "validator_endpoint.tmpl" }}
     },
-    "input_query_strings": [
-        "userID"
-    ],
     "backend":[
     {
-        "url_pattern":"/v1/social/community",
+        "url_pattern":"/v1/social/community?userID={userID}",
         "host":[
             "http://social-service.prod.svc.cluster.local:9896"
         ],
@@ -76,18 +67,15 @@
     ]
 },
 {
-    "endpoint":"/v1/gateway/social/community",
+    "endpoint":"/v1/gateway/social/user/{userID}/community",
     "method":"DELETE",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
         {{ include "validator_endpoint.tmpl" }}
     },
-    "input_query_strings": [
-        "userID"
-    ],
     "backend":[
     {
-        "url_pattern":"/v1/social/community",
+        "url_pattern":"/v1/social/community?userID={userID}",
         "host":[
             "http://social-service.prod.svc.cluster.local:9896"
         ],
@@ -101,18 +89,15 @@
     ]
 },
 {
-    "endpoint":"/v1/gateway/social/post",
+    "endpoint":"/v1/gateway/social/user/{userID}/post",
     "method":"POST",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
         {{ include "validator_endpoint.tmpl" }}
     },
-    "input_query_strings": [
-        "userID"
-    ],
     "backend":[
     {
-        "url_pattern":"/v1/social/post",
+        "url_pattern":"/v1/social/post?userID={userID}",
         "host":[
             "http://social-service.prod.svc.cluster.local:9896"
         ],
@@ -126,18 +111,15 @@
     ]
 },
 {
-    "endpoint":"/v1/gateway/social/post",
+    "endpoint":"/v1/gateway/social/user/{userID}/post",
     "method":"PUT",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
         {{ include "validator_endpoint.tmpl" }}
     },
-    "input_query_strings": [
-        "userID"
-    ],
     "backend":[
     {
-        "url_pattern":"/v1/social/post",
+        "url_pattern":"/v1/social/post?userID={userID}",
         "host":[
             "http://social-service.prod.svc.cluster.local:9896"
         ],
@@ -151,19 +133,15 @@
     ]
 },
 {
-    "endpoint":"/v1/gateway/social/post",
+    "endpoint":"/v1/gateway/social/user/{userID}/post/{postID}",
     "method":"GET",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
         {{ include "validator_endpoint.tmpl" }}
     },
-    "input_query_strings": [
-        "userID",
-        "postID"
-    ],
     "backend":[
     {
-        "url_pattern":"/v1/social/post",
+        "url_pattern":"/v1/social/post?userID={userID}&postID={postID}",
         "host":[
             "http://social-service.prod.svc.cluster.local:9896"
         ],
@@ -177,19 +155,16 @@
     ]
 },
 {
-    "endpoint":"/v1/gateway/social/post",
+    "endpoint":"/v1/gateway/social/user/{userID}/post/{postID}",
     "method":"DELETE",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
         {{ include "validator_endpoint.tmpl" }}
     },
-    "input_query_strings": [
-        "userID",
-        "postID"
-    ],
+
     "backend":[
     {
-        "url_pattern":"/v1/social/post",
+        "url_pattern":"/v1/social/post?userID={userID}&postID={postID}",
         "host":[
             "http://social-service.prod.svc.cluster.local:9896"
         ],
@@ -203,19 +178,15 @@
     ]
 },
 {
-    "endpoint":"/v1/gateway/social/follow",
+    "endpoint":"/v1/gateway/social/follow/source/{sourceUserID}/target/{targetUserID}",
     "method":"POST",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
         {{ include "validator_endpoint.tmpl" }}
     },
-    "input_query_strings": [
-        "sourceUserID",
-        "targetUserID"
-    ],
     "backend":[
     {
-        "url_pattern":"/v1/social/user/follow",
+        "url_pattern":"/v1/social/user/follow?sourceUserID={sourceUserID}&targetUserID={targetUserID}",
         "host":[
             "http://social-service.prod.svc.cluster.local:9896"
         ],
@@ -229,18 +200,15 @@
     ]
 },
 {
-    "endpoint":"/v1/gateway/social/follow/accept",
+    "endpoint":"/v1/gateway/social/follow/accept/{followRecordId}",
     "method":"POST",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
         {{ include "validator_endpoint.tmpl" }}
     },
-    "input_query_strings": [
-        "followRecordId"
-    ],
     "backend":[
     {
-        "url_pattern":"/v1/social/user/follow/accept",
+        "url_pattern":"/v1/social/user/follow/accept?followRecordId={followRecordId}",
         "host":[
             "http://social-service.prod.svc.cluster.local:9896"
         ],
@@ -254,19 +222,15 @@
     ]
 },
 {
-    "endpoint":"/v1/gateway/social/block",
+    "endpoint":"/v1/gateway/social/block/source/{sourceUserID}/target/{targetUserID}",
     "method":"POST",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
         {{ include "validator_endpoint.tmpl" }}
     },
-    "input_query_strings": [
-        "sourceUserID",
-        "targetUserID"
-    ],
     "backend":[
     {
-        "url_pattern":"/v1/social/user/block",
+        "url_pattern":"/v1/social/user/block?sourceUserID={sourceUserID}&targetUserID={targetUserID}",
         "host":[
             "http://social-service.prod.svc.cluster.local:9896"
         ],
@@ -280,20 +244,15 @@
     ]
 },
 {
-    "endpoint":"/v1/gateway/social/post/reaction",
+    "endpoint":"/v1/gateway/social/user/{userID}/post/{postID}/reaction/{type}",
     "method":"PUT",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
         {{ include "validator_endpoint.tmpl" }}
     },
-    "input_query_strings": [
-        "postId",
-        "userID",
-        "type"
-    ],
     "backend":[
     {
-        "url_pattern":"/v1/social/post/reaction",
+        "url_pattern":"/v1/social/post/reaction?userID={userID}&postId={postID}&type={type}",
         "host":[
             "http://social-service.prod.svc.cluster.local:9896"
         ],
@@ -307,19 +266,15 @@
     ]
 },
 {
-    "endpoint":"/v1/gateway/social/timeline",
+    "endpoint":"/v1/gateway/social/user/{userID}/timeline/{feedType}",
     "method":"GET",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
         {{ include "validator_endpoint.tmpl" }}
     },
-    "input_query_strings": [
-        "userID",
-        "feedType"
-    ],
     "backend":[
     {
-        "url_pattern":"/v1/social/user/timeline",
+        "url_pattern":"/v1/social/user/timeline?userID={userID}&feedType={feedType}",
         "host":[
             "http://social-service.prod.svc.cluster.local:9896"
         ],

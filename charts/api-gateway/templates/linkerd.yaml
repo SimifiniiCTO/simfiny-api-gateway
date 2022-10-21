@@ -23,4 +23,72 @@ spec:
         method: DELETE
         pathRegex: /v1/gateway/user/[^/]*
       name: DELETE /v1/gateway/user/{id}
+    - condition:
+        method: GET
+        pathRegex: /v1/gateway/user/[^/]*
+      name: GET /v1/gateway/user/{id}
+    - condition:
+        method: POST
+        pathRegex: /v1/gateway/financials/user/setup/[^/]*
+      name: POST /v1/gateway/financials/user/setup/{id}
+    - condition:
+        method: POST
+        pathRegex: /v1/gateway/financials/user/token-exchange/[^/]*/[^/]*
+      name: POST /v1/gateway/financials/user/token-exchange/{userID}/{publicToken}
+    - condition:
+        method: GET
+        pathRegex: /api/v1/accounts/user/[^/]*/account/[^/]*
+      name: GET /api/v1/accounts/user/{userID}/account/{virtualAccountID}
+    - condition:
+        method: GET
+        pathRegex: /v1/gateway/social/user/[^/]*/community
+      name: GET /v1/gateway/social/user/{userID}/community
+    - condition:
+        method: DELETE
+        pathRegex: /v1/gateway/social/user/[^/]*/community
+      name: DELETE /v1/gateway/social/user/{userID}/community
+    - condition:
+        method: POST
+        pathRegex: /v1/gateway/social/user/[^/]*/community
+      name: POST /v1/gateway/social/user/{userID}/community
+    - condition:
+        method: PUT
+        pathRegex: /v1/gateway/social/user/[^/]*/community
+      name: PUT /v1/gateway/social/user/{userID}/community
+    - condition:
+        method: POST
+        pathRegex: /v1/gateway/social/user/[^/]*/post
+      name: POST /v1/gateway/social/user/{userID}/post
+    - condition:
+        method: PUT
+        pathRegex: /v1/gateway/social/user/[^/]*/post
+      name: PUT /v1/gateway/social/user/{userID}/post
+    - condition:
+        method: GET
+        pathRegex: /v1/gateway/social/user/[^/]*/post/[^/]*
+      name: GET /v1/gateway/social/user/{userID}/post/{postID}
+    - condition:
+        method: DELETE
+        pathRegex: /v1/gateway/social/user/[^/]*/post/[^/]*
+      name: DELETE /v1/gateway/social/user/{userID}/post/{postID}
+    - condition:
+        method: POST
+        pathRegex: /v1/gateway/social/follow/source/[^/]*/target/[^/]*
+      name: POST /v1/gateway/social/follow/source/{sourceUserID}/target/{targetUserID}
+    - condition:
+        method: POST
+        pathRegex: /v1/gateway/social/follow/accept/[^/]*
+      name: POST /v1/gateway/social/follow/accept/{followRecordId}
+    - condition:
+        method: POST
+        pathRegex: /v1/gateway/social/block/source/[^/]*/target/[^/]*
+      name: POST /v1/gateway/social/block/source/{sourceUserID}/target/{targetUserID}
+    - condition:
+        method: PUT
+        pathRegex: /v1/gateway/social/user/[^/]*/post/[^/]*/reaction/[^/]*
+      name: PUT /v1/gateway/social/user/{userID}/post/{postID}/reaction/{type}
+    - condition:
+        method: GET
+        pathRegex: /v1/gateway/social/user/[^/]*/timeline/[^/]*
+      name: GET /v1/gateway/social/user/{userID}/timeline/{feedType}
 {{- end }}
