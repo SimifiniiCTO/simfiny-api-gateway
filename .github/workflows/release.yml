@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - "main"
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
 
 permissions:
   contents: write # needed to write releases
@@ -118,7 +123,7 @@ jobs:
           tags: |
             type=raw,value=${{ steps.prep.outputs.VERSION }}
             type=raw,value=latest
-            type=raw,value=${{ steps.semvers.outputs.patch }}
+            type=raw,value=${{ steps.semvers.outputs.minor }}
       - name: Publish Multi-Arch Image Social Service
         uses: docker/build-push-action@v2
         with:
