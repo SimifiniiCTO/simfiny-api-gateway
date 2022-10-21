@@ -22,7 +22,7 @@
       "disable_access_log":true
    },
    "telemetry/logging":{
-      "level":"INFO",
+      "level":"ERROR",
       "prefix":"[SIMFINY API-GATEWAY]",
       "syslog":true,
       "stdout":true
@@ -43,10 +43,10 @@
    },
    "telemetry/metrics":{
       "collection_time":"60s",
-      "proxy_disabled":false,
-      "router_disabled":false,
-      "backend_disabled":false,
-      "endpoint_disabled":false,
+      "proxy_disabled":true,
+      "router_disabled":true,
+      "backend_disabled":true,
+      "endpoint_disabled":true,
       "listen_address":":8081"
    },
    "security/cors":{
