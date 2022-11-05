@@ -705,7 +705,7 @@
       },
       "backend": [
         {
-          "url_pattern": "/v1/social/post?userID={userID}&postID={postID}",
+          "url_pattern": "/v1/social/post?userID={userID}&postId={postID}",
           "host": [
             "http://social-service.prod.svc.cluster.local:9896"
           ],
@@ -758,7 +758,7 @@
       },
       "backend": [
         {
-          "url_pattern": "/v1/social/post?userID={userID}&postID={postID}",
+          "url_pattern": "/v1/social/post?userID={userID}&postId={postID}",
           "host": [
             "http://social-service.prod.svc.cluster.local:9896"
           ],
@@ -841,7 +841,7 @@
       ]
     },
     {
-      "endpoint": "/v1/gateway/social/follow/accept/{followRecordId}",
+      "endpoint": "/v1/gateway/social/follow/accept/{followRecordID}",
       "method": "POST",
       "extra_config": {
         "qos/ratelimit/router": {
@@ -864,7 +864,7 @@
       },
       "backend": [
         {
-          "url_pattern": "/v1/social/user/follow/accept?followRecordId={followRecordId}",
+          "url_pattern": "/v1/social/user/follow/accept?followRecordId={followRecordID}",
           "host": [
             "http://social-service.prod.svc.cluster.local:9896"
           ],
