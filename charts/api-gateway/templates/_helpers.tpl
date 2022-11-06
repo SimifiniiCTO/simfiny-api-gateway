@@ -40,6 +40,7 @@ helm.sh/chart: {{ include "api-gateway.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+date: {{ now | date "2006-01-02T15-04-05" | quote }}
 {{- end }}
 
 {{/*
@@ -48,7 +49,6 @@ Selector labels
 {{- define "api-gateway.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "api-gateway.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-date: {{ now | date "2006-01-02T15-04-05" | quote }}
 {{- end }}
 
 {{/*
