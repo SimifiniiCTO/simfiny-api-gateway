@@ -8,7 +8,7 @@ image:
   repository: feelguuds/api-gateway
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: sha-535389ce
+  tag: sha-31f70e1e
 
 imagePullSecrets: []
 nameOverride: ""

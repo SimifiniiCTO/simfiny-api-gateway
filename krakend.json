@@ -72,7 +72,9 @@
       "max_age": "12h"
     },
     "security/http": {
-      "allowed_hosts": [],
+      "allowed_hosts": [
+        "https://simfiny.app"
+      ],
       "ssl_redirect": true,
       "sts_seconds": 300,
       "sts_include_subdomains": true,
