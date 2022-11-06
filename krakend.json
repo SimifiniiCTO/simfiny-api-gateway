@@ -70,20 +70,6 @@
         "Content-Length"
       ],
       "max_age": "12h"
-    },
-    "security/http": {
-      "allowed_hosts": [],
-      "ssl_redirect": true,
-      "sts_seconds": 300,
-      "sts_include_subdomains": true,
-      "frame_deny": true,
-      "referrer_policy": "same-origin",
-      "custom_frame_options_value": "ALLOW-FROM https://simfiny.co",
-      "hpkp_public_key": "pin-sha256=\"base64==\"; max-age=expireTime [; includeSubDomains][; report-uri=\"reportURI\"]",
-      "content_type_nosniff": true,
-      "browser_xss_filter": true,
-      "content_security_policy": "default-src 'self';",
-      "is_development": true
     }
   },
   "host": [
