@@ -48,8 +48,6 @@ Selector labels
 {{- define "api-gateway.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "api-gateway.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/name: {{ .Values.app.frontendName }}
-app.kubernetes.io/instance: {{ .Release.Name }}
 date: "{{ .Release.Time.Seconds }}"
 {{- end }}
 
