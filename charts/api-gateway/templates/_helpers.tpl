@@ -40,7 +40,6 @@ helm.sh/chart: {{ include "api-gateway.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-date: {{ now | date "2006-01-02T15-04-05" | quote }}
 {{- end }}
 
 {{/*
