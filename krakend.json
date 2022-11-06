@@ -113,6 +113,9 @@
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
+            },
+            "backend/http": {
+              "return_error_details": "message"
             }
           }
         }
