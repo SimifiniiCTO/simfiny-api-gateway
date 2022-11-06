@@ -81,6 +81,7 @@
     {
       "endpoint": "/v1/gateway/user/registration",
       "method": "POST",
+      "output_encoding": "no-op",
       "extra_config": {
         "qos/ratelimit/router": {
           "max_rate": 1000,
@@ -94,6 +95,7 @@
           "host": [
             "http://user-service.prod.svc.cluster.local:9896"
           ],
+          "encoding": "no-op",
           "method": "POST",
           "extra_config": {
             "modifier/martian": {

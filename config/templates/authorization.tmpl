@@ -3,6 +3,7 @@
 {
     "endpoint":"/v1/gateway/user/registration",
     "method":"POST",
+    "output_encoding": "no-op",
     "extra_config":{
     {{ include "rate_limit_endpoint.tmpl" }}
     },
@@ -12,6 +13,7 @@
         "host":[
             "http://user-service.prod.svc.cluster.local:9896"
         ],
+        "encoding": "no-op",
         "method":"POST",
         "extra_config":{
             {{ include "modifier_backend.tmpl" }},
