@@ -62,10 +62,10 @@ jobs:
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             VERSION=${GITHUB_REF/refs\/tags\//}
           fi
-          echo name=BUILD_DATE::$(date -u +'%Y-%m-%dT%H:%M:%SZ') >> $GITHUB_OUTPUT
-          echo name=VERSION::${VERSION} >> $GITHUB_OUTPUT
-          echo name=REVISION::${GITHUB_SHA} >> $GITHUB_OUTPUT
-          echo name=HELM_VERSION::${HELM_VERSION} >> $GITHUB_OUTPUT
+          echo "BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_OUTPUT
+          echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+          echo "REVISION=${GITHUB_SHA}" >> $GITHUB_OUTPUT
+          echo "HELM_VERSION=${HELM_VERSION}" >> $GITHUB_OUTPUT
       - name: Validate Service Helm Chart
         uses: stefanprodan/kube-tools@v1
         with:
