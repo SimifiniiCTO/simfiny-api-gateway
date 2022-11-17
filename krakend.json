@@ -190,7 +190,7 @@
       },
       "backend": [
         {
-          "url_pattern": "/api/v1/user?email={email}",
+          "url_pattern": "/api/v1/user/account?email={email}",
           "host": [
             "http://user-service.prod.svc.cluster.local:9896"
           ],
