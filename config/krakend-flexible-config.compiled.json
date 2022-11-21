@@ -1,0 +1,1209 @@
+{
+    "version": 3,
+    "port": 8080,
+    "name": "Simfinii Backend API Gateway",
+    "cache_ttl": "3600s",
+    "timeout": "30s",
+    "read_timeout": "30s",
+    "write_timeout": "30s",
+    "idle_timeout": "30s",
+    "read_header_timeout": "30000ms",
+    "max_idle_connections": 150,
+    "extra_config": {
+   "documentation/openapi": {
+    "description": "This is the api gateway for the simfiny backend",
+    "version": "1.0.0",
+    "host": "simfiny.io",
+    "base_path": "/v1",
+    "terms_of_service": "http://url.to/tos",
+    "contact_name": "yoan yomba",
+    "contact_email": "yoan@simfiny.com",
+    "contact_url": "https://simfiny.io/developers",
+    "license_name": "MIT",
+    "license_url": "https://opensource.org/licenses/MIT",
+    "tags": ["platform", "fin-tech", "Restricted"],
+    "schemes": [
+        "http",
+        "https"
+    ]
+   },
+   "router":{
+      "return_error_msg":true,
+      "forwarded_by_client_ip":true,
+      "disable_access_log":true
+   },
+   "telemetry/logging":{
+      "level":"ERROR",
+      "prefix":"[SIMFINY API-GATEWAY]",
+      "syslog":true,
+      "stdout":true
+   },
+   "telemetry/metrics":{
+      "collection_time":"60s",
+      "proxy_disabled":false,
+      "router_disabled":false,
+      "backend_disabled":false,
+      "endpoint_disabled":false,
+      "listen_address":":8081"
+   },
+   "security/cors":{
+      "allow_origins":[
+         "*"
+      ],
+      "allow_methods":[
+         "GET",
+         "HEAD",
+         "POST",
+         "PUT",
+         "PATCH",
+         "DELETE",
+         "OPTIONS"
+      ],
+      "allow_headers":[
+         "*"
+      ],
+    "expose_headers": [
+        "Content-Length"
+      ],
+      "max_age":"12h"
+   }
+},
+    "host": ["http://api-gateway-1.prod.svc.cluster.local:8080","http://api-gateway-2.prod.svc.cluster.local:8080","http://api-gateway-3.prod.svc.cluster.local:8080"],
+    "endpoints": [
+
+
+
+
+
+{
+    "endpoint":"/v1/gateway/user/registration",
+    "method":"POST",
+    "output_encoding": "no-op",
+    "extra_config":{
+    "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+}
+    },
+    "backend":[
+    {
+        "url_pattern":"/api/v1/user",
+        "host":[
+            "http://user-service.prod.svc.cluster.local:9896"
+        ],
+        "encoding": "no-op",
+        "method":"POST",
+        "extra_config":{
+            "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+            "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+            "backend/http": {
+    "return_error_details": "message"
+}
+        }
+    }
+    ]
+},
+{
+    "endpoint":"/v1/gateway/user/logout/{id}",
+    "method":"POST",
+    "extra_config":{
+        "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+},
+        "auth/validator": {
+    "alg": "RS256",
+    "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true,
+    "propagate_claims": [
+        ["sub", "x-user-authn-id"]
+    ]
+}
+    },
+    "backend":[
+        {
+            "url_pattern":"/api/v1/user/logout/{id}",
+            "host":[
+                "http://headless-authentication-service.prod.svc.cluster.local:9896"
+            ],
+            "method":"POST",
+            "extra_config":{
+                "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+                "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+                "backend/http": {
+    "return_error_details": "message"
+}
+            }
+        }
+    ]
+},
+{
+    "endpoint":"/v1/gateway/user/login/{email}/{password}",
+    "method":"POST",
+    "extra_config":{
+        "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+},
+        "proxy":{
+    "sequential":true
+}
+    },
+    "backend":[
+        {
+            "url_pattern":"/api/v1/user?email={email}",
+            "host":[
+                "http://user-service.prod.svc.cluster.local:9896"
+            ],
+            "method":"GET",
+            "extra_config":{
+                "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+                "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+                "backend/http": {
+    "return_error_details": "message"
+}
+            }
+        },
+        {
+            "url_pattern":"/api/v1/user/login?email={email}&password={password}",
+            "host":[
+                "http://headless-authentication-service.prod.svc.cluster.local:9796"
+            ],
+            "method":"POST",
+            "extra_config":{
+                "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+                "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+                "backend/http": {
+    "return_error_details": "message"
+}
+            }
+        }
+    ]
+}
+,
+
+
+
+{
+    "endpoint":"/v1/gateway/user/{id}",
+    "method":"DELETE",
+    "extra_config":{
+        "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+},
+        "auth/validator": {
+    "alg": "RS256",
+    "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true,
+    "propagate_claims": [
+        ["sub", "x-user-authn-id"]
+    ]
+}
+    },
+    "backend":[
+    {
+        "url_pattern":"/api/v1/user/{id}",
+        "host":[
+            "http://user-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"DELETE",
+        "extra_config":{
+            "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+            "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+            "backend/http": {
+    "return_error_details": "message"
+}
+        }
+    }
+    ]
+},
+{
+    "endpoint":"/v1/gateway/user/{id}",
+    "method":"GET",
+    "extra_config":{
+        "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+},
+        "auth/validator": {
+    "alg": "RS256",
+    "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true,
+    "propagate_claims": [
+        ["sub", "x-user-authn-id"]
+    ]
+}
+    },
+    "backend":[
+    {
+        "url_pattern":"/api/v1/user/{id}",
+        "host":[
+            "http://user-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"GET",
+        "extra_config":{
+            "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+            "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+            "backend/http": {
+    "return_error_details": "message"
+}
+        }
+    }
+    ]
+},
+{
+    "endpoint":"/v1/gateway/user",
+    "input_query_strings": [
+        "email"
+    ],
+    "method":"GET",
+    "extra_config":{
+        "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+},
+        "auth/validator": {
+    "alg": "RS256",
+    "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true,
+    "propagate_claims": [
+        ["sub", "x-user-authn-id"]
+    ]
+}
+    },
+    "backend":[
+    {
+        "url_pattern":"/api/v1/user",
+        "host":[
+            "http://user-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"GET",
+        "extra_config":{
+            "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+            "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+            "backend/http": {
+    "return_error_details": "message"
+}
+        }
+    }
+    ]
+}
+,
+
+
+{
+    "endpoint":"/v1/gateway/social/user/{userID}/community",
+    "method":"GET",
+    "extra_config":{
+        "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+},
+        "auth/validator": {
+    "alg": "RS256",
+    "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true,
+    "propagate_claims": [
+        ["sub", "x-user-authn-id"]
+    ]
+}
+    },
+    "backend":[
+    {
+        "url_pattern":"/v1/social/community?userID={userID}",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"GET",
+        "extra_config":{
+            "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+            "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+            "backend/http": {
+    "return_error_details": "message"
+}
+        }
+    }
+    ]
+},
+{
+    "endpoint":"/v1/gateway/social/user/{userID}/community",
+    "method":"POST",
+    "extra_config":{
+        "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+},
+        "auth/validator": {
+    "alg": "RS256",
+    "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true,
+    "propagate_claims": [
+        ["sub", "x-user-authn-id"]
+    ]
+}
+    },
+    "backend":[
+    {
+        "url_pattern":"/v1/social/community?userID={userID}",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"POST",
+        "extra_config":{
+            "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+            "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+            "backend/http": {
+    "return_error_details": "message"
+}
+        }
+    }
+    ]
+},
+{
+    "endpoint":"/v1/gateway/social/user/{userID}/community",
+    "method":"PUT",
+    "extra_config":{
+        "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+},
+        "auth/validator": {
+    "alg": "RS256",
+    "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true,
+    "propagate_claims": [
+        ["sub", "x-user-authn-id"]
+    ]
+}
+    },
+    "backend":[
+    {
+        "url_pattern":"/v1/social/community?userID={userID}",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"PUT",
+        "extra_config":{
+            "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+            "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+            "backend/http": {
+    "return_error_details": "message"
+}
+        }
+    }
+    ]
+},
+{
+    "endpoint":"/v1/gateway/social/user/{userID}/community",
+    "method":"DELETE",
+    "extra_config":{
+        "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+},
+        "auth/validator": {
+    "alg": "RS256",
+    "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true,
+    "propagate_claims": [
+        ["sub", "x-user-authn-id"]
+    ]
+}
+    },
+    "backend":[
+    {
+        "url_pattern":"/v1/social/community?userID={userID}",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"DELETE",
+        "extra_config":{
+            "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+            "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+            "backend/http": {
+    "return_error_details": "message"
+}
+        }
+    }
+    ]
+},
+{
+    "endpoint":"/v1/gateway/social/user/{userID}/post",
+    "method":"POST",
+    "extra_config":{
+        "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+},
+        "auth/validator": {
+    "alg": "RS256",
+    "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true,
+    "propagate_claims": [
+        ["sub", "x-user-authn-id"]
+    ]
+}
+    },
+    "backend":[
+    {
+        "url_pattern":"/v1/social/post?userID={userID}",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"POST",
+        "extra_config":{
+            "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+            "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+            "backend/http": {
+    "return_error_details": "message"
+}
+        }
+    }
+    ]
+},
+{
+    "endpoint":"/v1/gateway/social/user/{userID}/post",
+    "method":"PUT",
+    "extra_config":{
+        "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+},
+        "auth/validator": {
+    "alg": "RS256",
+    "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true,
+    "propagate_claims": [
+        ["sub", "x-user-authn-id"]
+    ]
+}
+    },
+    "backend":[
+    {
+        "url_pattern":"/v1/social/post?userID={userID}",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"PUT",
+        "extra_config":{
+            "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+            "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+            "backend/http": {
+    "return_error_details": "message"
+}
+        }
+    }
+    ]
+},
+{
+    "endpoint":"/v1/gateway/social/user/{userID}/post/{postID}",
+    "method":"GET",
+    "extra_config":{
+        "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+},
+        "auth/validator": {
+    "alg": "RS256",
+    "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true,
+    "propagate_claims": [
+        ["sub", "x-user-authn-id"]
+    ]
+}
+    },
+    "backend":[
+    {
+        "url_pattern":"/v1/social/post?userID={userID}&postId={postID}",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"GET",
+        "extra_config":{
+            "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+            "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+            "backend/http": {
+    "return_error_details": "message"
+}
+        }
+    }
+    ]
+},
+{
+    "endpoint":"/v1/gateway/social/user/{userID}/post/{postID}",
+    "method":"DELETE",
+    "extra_config":{
+        "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+},
+        "auth/validator": {
+    "alg": "RS256",
+    "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true,
+    "propagate_claims": [
+        ["sub", "x-user-authn-id"]
+    ]
+}
+    },
+
+    "backend":[
+    {
+        "url_pattern":"/v1/social/post?userID={userID}&postId={postID}",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"DELETE",
+        "extra_config":{
+            "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+            "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+            "backend/http": {
+    "return_error_details": "message"
+}
+        }
+    }
+    ]
+},
+{
+    "endpoint":"/v1/gateway/social/follow/source/{sourceUserID}/target/{targetUserID}",
+    "method":"POST",
+    "extra_config":{
+        "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+},
+        "auth/validator": {
+    "alg": "RS256",
+    "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true,
+    "propagate_claims": [
+        ["sub", "x-user-authn-id"]
+    ]
+}
+    },
+    "backend":[
+    {
+        "url_pattern":"/v1/social/user/follow?sourceUserID={sourceUserID}&targetUserID={targetUserID}",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"POST",
+        "extra_config":{
+            "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+            "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+            "backend/http": {
+    "return_error_details": "message"
+}
+        }
+    }
+    ]
+},
+{
+    "endpoint":"/v1/gateway/social/follow/accept/{followRecordID}",
+    "method":"POST",
+    "extra_config":{
+        "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+},
+        "auth/validator": {
+    "alg": "RS256",
+    "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true,
+    "propagate_claims": [
+        ["sub", "x-user-authn-id"]
+    ]
+}
+    },
+    "backend":[
+    {
+        "url_pattern":"/v1/social/user/follow/accept?followRecordId={followRecordID}",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"POST",
+        "extra_config":{
+            "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+            "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+            "backend/http": {
+    "return_error_details": "message"
+}
+        }
+    }
+    ]
+},
+{
+    "endpoint":"/v1/gateway/social/block/source/{sourceUserID}/target/{targetUserID}",
+    "method":"POST",
+    "extra_config":{
+        "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+},
+        "auth/validator": {
+    "alg": "RS256",
+    "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true,
+    "propagate_claims": [
+        ["sub", "x-user-authn-id"]
+    ]
+}
+    },
+    "backend":[
+    {
+        "url_pattern":"/v1/social/user/block?sourceUserID={sourceUserID}&targetUserID={targetUserID}",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"POST",
+        "extra_config":{
+            "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+            "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+            "backend/http": {
+    "return_error_details": "message"
+}
+        }
+    }
+    ]
+},
+{
+    "endpoint":"/v1/gateway/social/user/{userID}/post/{postID}/reaction/{type}",
+    "method":"PUT",
+    "extra_config":{
+        "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+},
+        "auth/validator": {
+    "alg": "RS256",
+    "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true,
+    "propagate_claims": [
+        ["sub", "x-user-authn-id"]
+    ]
+}
+    },
+    "backend":[
+    {
+        "url_pattern":"/v1/social/post/reaction?userID={userID}&postId={postID}&type={type}",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"PUT",
+        "extra_config":{
+            "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+            "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+            "backend/http": {
+    "return_error_details": "message"
+}
+        }
+    }
+    ]
+},
+{
+    "endpoint":"/v1/gateway/social/user/{userID}/timeline/{feedType}",
+    "method":"GET",
+    "extra_config":{
+        "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+},
+        "auth/validator": {
+    "alg": "RS256",
+    "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true,
+    "propagate_claims": [
+        ["sub", "x-user-authn-id"]
+    ]
+}
+    },
+    "backend":[
+    {
+        "url_pattern":"/v1/social/user/timeline?userID={userID}&feedType={feedType}",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"GET",
+        "extra_config":{
+            "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+            "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+            "backend/http": {
+    "return_error_details": "message"
+}
+        }
+    }
+    ]
+}
+,
+
+
+{
+    "endpoint":"/v1/gateway/financials/user/setup/{userId}",
+    "method":"POST",
+    "extra_config":{
+        "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+}
+    },
+    "backend":[
+    {
+        "host":[
+            "http://financial-integration-service.prod.svc.cluster.local:9896"
+        ],
+        "url_pattern":"/api/v1/token/setup/{userId}",
+        "method":"POST",
+        "extra_config":{
+            "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+            "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+            "backend/http": {
+    "return_error_details": "message"
+}
+        }
+    }
+    ]
+},
+{
+    "endpoint":"/v1/gateway/financials/user/token-exchange/{userID}/{publicToken}",
+    "method":"POST",
+    "extra_config":{
+        "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+}
+    },
+    "backend":[
+    {
+        "url_pattern":"/api/v1/token/exchange/{userID}/{publicToken}",
+        "host":[
+            "http://financial-integration-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"POST",
+        "extra_config":{
+            "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+            "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+            "backend/http": {
+    "return_error_details": "message"
+}
+        }
+    }
+    ]
+},
+{
+    "endpoint":"/v1/gateway/financials/{userID}/{virtualAccountID}",
+    "method":"GET",
+    "extra_config":{
+        "qos/ratelimit/router": {
+    "max_rate": 1000,
+    "client_max_rate": 1000,
+    "strategy": "ip"
+},
+        "auth/validator": {
+    "alg": "RS256",
+    "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true,
+    "propagate_claims": [
+        ["sub", "x-user-authn-id"]
+    ]
+}
+    },
+    "backend":[
+    {
+        "url_pattern":"/api/v1/accounts/user/{userID}/account/{virtualAccountID}",
+        "host":[
+            "http://financial-integration-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"GET",
+        "extra_config":{
+            "modifier/martian": {
+    "fifo.Group": {
+        "scope": [
+            "request",
+            "response"
+        ],
+        "aggregateErrors": true
+    }
+},
+            "qos/circuit-breaker": {
+    "interval": 30,
+    "timeout": 2,
+    "max_errors": 5,
+    "log_status_change": true,
+    "name": "simfiny-circuit-breaker"
+},
+            "backend/http": {
+    "return_error_details": "message"
+}
+        }
+    }
+    ]
+}
+
+]
+}
