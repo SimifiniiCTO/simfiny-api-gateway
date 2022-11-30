@@ -46,9 +46,32 @@
     ]
 },
 {
+    "endpoint":"/v1/gateway/user/{id}",
+    "method":"PUT",
+    "extra_config":{
+        {{ include "rate_limit_endpoint.tmpl" }},
+        {{ include "validator_endpoint.tmpl" }}
+    },
+    "backend":[
+    {
+        "url_pattern":"/api/v1/user/{id}",
+        "host":[
+            "http://user-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"PUT",
+        "extra_config":{
+            {{ include "modifier_backend.tmpl" }},
+            {{ include "circuit_breaker_backend.tmpl" }},
+            {{ include "error_detail_backend.tmpl" }}
+        }
+    }
+    ]
+},
+{
     "endpoint":"/v1/gateway/user",
     "input_query_strings": [
-        "email"
+        "email",
+        "username"
     ],
     "method":"GET",
     "extra_config":{
@@ -57,6 +80,31 @@
     "backend":[
     {
         "url_pattern":"/api/v1/user",
+        "host":[
+            "http://user-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"GET",
+        "extra_config":{
+            {{ include "modifier_backend.tmpl" }},
+            {{ include "circuit_breaker_backend.tmpl" }},
+            {{ include "error_detail_backend.tmpl" }}
+        }
+    }
+    ]
+},
+{
+    "endpoint":"/v1/gateway/user/account",
+    "input_query_strings": [
+        "email",
+        "username"
+    ],
+    "method":"GET",
+    "extra_config":{
+        {{ include "rate_limit_endpoint.tmpl" }}
+    },
+    "backend":[
+    {
+        "url_pattern":"/api/v1/user/account",
         "host":[
             "http://user-service.prod.svc.cluster.local:9896"
         ],
