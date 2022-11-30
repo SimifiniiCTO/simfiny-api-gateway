@@ -2,6 +2,7 @@
 {{$host := .}}
 {
     "endpoint":"/v1/gateway/user/registration",
+    "@comment": "purpose: endpoint used to register a user profile against our backend",
     "method":"POST",
     "output_encoding": "no-op",
     "extra_config":{
@@ -25,6 +26,7 @@
 },
 {
     "endpoint":"/v1/gateway/user/logout/{id}",
+    "@comment": "purpose: logs out a profile. TODO: for now this will not work. need to pass the userID instead",
     "method":"POST",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
@@ -47,6 +49,7 @@
 },
 {
     "endpoint":"/v1/gateway/user/login/{email}/{password}",
+    "@comment": "purpose: authenticates a user with our backend given we are provided with a set of credentials. returned is an object { account: {} profile: {} jwt: xxxxxx }",
     "method":"POST",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
