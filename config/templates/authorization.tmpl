@@ -2,6 +2,7 @@
 {{$host := .}}
 {
     "endpoint":"/v1/gateway/user/registration",
+    "@comment": "purpose: endpoint used to register a user profile against our backend",
     "method":"POST",
     "output_encoding": "no-op",
     "extra_config":{
@@ -25,6 +26,7 @@
 },
 {
     "endpoint":"/v1/gateway/user/logout/{id}",
+    "@comment": "purpose: logs out a profile. TODO: for now this will not work. need to pass the userID instead",
     "method":"POST",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
@@ -47,6 +49,7 @@
 },
 {
     "endpoint":"/v1/gateway/user/login/{email}/{password}",
+    "@comment": "purpose: authenticates a user with our backend given we are provided with a set of credentials. returned is an object { account: {} profile: {} jwt: xxxxxx }",
     "method":"POST",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
@@ -54,7 +57,8 @@
     },
     "backend":[
         {
-            "url_pattern":"/api/v1/user?email={email}",
+            "@comment": "we query for the userID based on the provided user email",
+            "url_pattern":"/api/v1/user/account?email={email}",
             "host":[
                 "http://user-service.prod.svc.cluster.local:9896"
             ],
@@ -66,11 +70,25 @@
             }
         },
         {
+            "@comment": "we call the authentication service with the user credentials in hopes of obtaining a jwt token",
             "url_pattern":"/api/v1/user/login?email={email}&password={password}",
             "host":[
                 "http://headless-authentication-service.prod.svc.cluster.local:9796"
             ],
             "method":"POST",
+            "extra_config":{
+                {{ include "modifier_backend.tmpl" }},
+                {{ include "circuit_breaker_backend.tmpl" }},
+                {{ include "error_detail_backend.tmpl" }}
+            }
+        },
+        {
+            "@comment": "we call the social service to obtain the social profile of the user",
+            "url_pattern":"/v1/social/user?userID={resp0_account.id}",
+            "host":[
+                "http://social-service.prod.svc.cluster.local:9896"
+            ],
+            "method":"GET",
             "extra_config":{
                 {{ include "modifier_backend.tmpl" }},
                 {{ include "circuit_breaker_backend.tmpl" }},
