@@ -70,12 +70,12 @@
             }
         },
         {
-            "@comment": "we call the authentication service with the user credentials in hopes of obtaining a jwt token",
-            "url_pattern":"/api/v1/user/login?email={email}&password={password}",
+            "@comment": "we call the social service to obtain the social profile of the user",
+            "url_pattern":"/v1/social/user?userID={resp0_account.id}",
             "host":[
-                "http://headless-authentication-service.prod.svc.cluster.local:9796"
+                "http://social-service.prod.svc.cluster.local:9896"
             ],
-            "method":"POST",
+            "method":"GET",
             "extra_config":{
                 {{ include "modifier_backend.tmpl" }},
                 {{ include "circuit_breaker_backend.tmpl" }},
@@ -83,12 +83,12 @@
             }
         },
         {
-            "@comment": "we call the social service to obtain the social profile of the user",
-            "url_pattern":"/v1/social/user?userID={resp0_account.id}",
+            "@comment": "we call the authentication service with the user credentials in hopes of obtaining a jwt token",
+            "url_pattern":"/api/v1/user/login?email={email}&password={password}",
             "host":[
-                "http://social-service.prod.svc.cluster.local:9896"
+                "http://headless-authentication-service.prod.svc.cluster.local:9796"
             ],
-            "method":"GET",
+            "method":"POST",
             "extra_config":{
                 {{ include "modifier_backend.tmpl" }},
                 {{ include "circuit_breaker_backend.tmpl" }},
