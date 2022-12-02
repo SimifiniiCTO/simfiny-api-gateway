@@ -68,6 +68,10 @@
                 {{ include "modifier_backend.tmpl" }},
                 {{ include "circuit_breaker_backend.tmpl" }},
                 {{ include "error_detail_backend.tmpl" }}
+            },
+            "mapping": {
+                "id": "userAccountID",
+                "authnAccountId": "userAuthnAccountID"
             }
         },
         {
@@ -90,7 +94,7 @@
                 "http://headless-authentication-service.prod.svc.cluster.local:9796"
             ],
             "group": "user_profile",
-            "target": "profile"
+            "target": "profile",
             "method":"POST",
             "extra_config":{
                 {{ include "modifier_backend.tmpl" }},
