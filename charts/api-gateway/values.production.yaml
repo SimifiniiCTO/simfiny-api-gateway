@@ -66,12 +66,13 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
+# https://sdbrett.com/post/2019-11-25-kubernetes-resource-limits/
 resources:
   limits:
-    memory: "512Mi"
+    memory: "1Gi"
   requests:
-    cpu: "200m"
-    memory: "256Mi"
+    cpu: "500m"
+    memory: "512Mi"
 
 autoscaling:
   enabled: false

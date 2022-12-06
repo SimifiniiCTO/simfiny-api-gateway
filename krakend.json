@@ -198,6 +198,7 @@
           "host": [
             "http://user-service.prod.svc.cluster.local:9896"
           ],
+          "group": "user_account",
           "method": "GET",
           "extra_config": {
             "modifier/martian": {
@@ -219,6 +220,10 @@
             "backend/http": {
               "return_error_details": "message"
             }
+          },
+          "mapping": {
+            "id": "userAccountID",
+            "authnAccountId": "userAuthnAccountID"
           }
         },
         {
@@ -256,6 +261,8 @@
           "host": [
             "http://headless-authentication-service.prod.svc.cluster.local:9796"
           ],
+          "group": "user_profile",
+          "target": "profile",
           "method": "POST",
           "extra_config": {
             "modifier/martian": {
@@ -277,7 +284,15 @@
             "backend/http": {
               "return_error_details": "message"
             }
-          }
+          },
+          "mapping": {
+            "Id": "userProfileID"
+          },
+          "deny": [
+            "NewsFeedTimelineID",
+            "NotificationTimelineID",
+            "PersonalFeedTimelineID"
+          ]
         }
       ]
     },
