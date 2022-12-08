@@ -550,6 +550,7 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client to get a community profile (social)",
       "endpoint": "/v1/gateway/social/user/{userID}/community",
       "method": "GET",
       "extra_config": {
@@ -604,169 +605,8 @@
       ]
     },
     {
-      "endpoint": "/v1/gateway/social/user/{userID}/community",
-      "method": "POST",
-      "extra_config": {
-        "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
-          "strategy": "ip"
-        },
-        "auth/validator": {
-          "alg": "RS256",
-          "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
-          "cache": true,
-          "disable_jwk_security": true,
-          "operation_debug": true,
-          "propagate_claims": [
-            [
-              "sub",
-              "x-user-authn-id"
-            ]
-          ]
-        }
-      },
-      "backend": [
-        {
-          "url_pattern": "/v1/social/community?userID={userID}",
-          "host": [
-            "http://social-service.prod.svc.cluster.local:9896"
-          ],
-          "method": "POST",
-          "extra_config": {
-            "modifier/martian": {
-              "fifo.Group": {
-                "scope": [
-                  "request",
-                  "response"
-                ],
-                "aggregateErrors": true
-              }
-            },
-            "qos/circuit-breaker": {
-              "interval": 30,
-              "timeout": 2,
-              "max_errors": 5,
-              "log_status_change": true,
-              "name": "simfiny-circuit-breaker"
-            },
-            "backend/http": {
-              "return_error_details": "message"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "endpoint": "/v1/gateway/social/user/{userID}/community",
-      "method": "PUT",
-      "extra_config": {
-        "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
-          "strategy": "ip"
-        },
-        "auth/validator": {
-          "alg": "RS256",
-          "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
-          "cache": true,
-          "disable_jwk_security": true,
-          "operation_debug": true,
-          "propagate_claims": [
-            [
-              "sub",
-              "x-user-authn-id"
-            ]
-          ]
-        }
-      },
-      "backend": [
-        {
-          "url_pattern": "/v1/social/community?userID={userID}",
-          "host": [
-            "http://social-service.prod.svc.cluster.local:9896"
-          ],
-          "method": "PUT",
-          "extra_config": {
-            "modifier/martian": {
-              "fifo.Group": {
-                "scope": [
-                  "request",
-                  "response"
-                ],
-                "aggregateErrors": true
-              }
-            },
-            "qos/circuit-breaker": {
-              "interval": 30,
-              "timeout": 2,
-              "max_errors": 5,
-              "log_status_change": true,
-              "name": "simfiny-circuit-breaker"
-            },
-            "backend/http": {
-              "return_error_details": "message"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "endpoint": "/v1/gateway/social/user/{userID}/community",
-      "method": "DELETE",
-      "extra_config": {
-        "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
-          "strategy": "ip"
-        },
-        "auth/validator": {
-          "alg": "RS256",
-          "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
-          "cache": true,
-          "disable_jwk_security": true,
-          "operation_debug": true,
-          "propagate_claims": [
-            [
-              "sub",
-              "x-user-authn-id"
-            ]
-          ]
-        }
-      },
-      "backend": [
-        {
-          "url_pattern": "/v1/social/community?userID={userID}",
-          "host": [
-            "http://social-service.prod.svc.cluster.local:9896"
-          ],
-          "method": "DELETE",
-          "extra_config": {
-            "modifier/martian": {
-              "fifo.Group": {
-                "scope": [
-                  "request",
-                  "response"
-                ],
-                "aggregateErrors": true
-              }
-            },
-            "qos/circuit-breaker": {
-              "interval": 30,
-              "timeout": 2,
-              "max_errors": 5,
-              "log_status_change": true,
-              "name": "simfiny-circuit-breaker"
-            },
-            "backend/http": {
-              "return_error_details": "message"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "endpoint": "/v1/gateway/social/follow/source/{sourceUserID}/target/{targetUserID}",
+      "@comment": "This endpoint enables the client to send a follow profile request to a user profile (social)",
+      "endpoint": "/v1/gateway/social/follow/user/source/{sourceUserID}/target/{targetUserID}",
       "method": "POST",
       "extra_config": {
         "qos/ratelimit/router": {
@@ -820,6 +660,117 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client to send a follow profile request to a community profile (social)",
+      "endpoint": "/v1/gateway/social/follow/community/source/{sourceUserID}/target/{targetUserID}",
+      "method": "POST",
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 1000,
+          "client_max_rate": 1000,
+          "strategy": "ip"
+        },
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+          "cache": true,
+          "disable_jwk_security": true,
+          "operation_debug": true,
+          "propagate_claims": [
+            [
+              "sub",
+              "x-user-authn-id"
+            ]
+          ]
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/v1/social/user/follow/community?sourceUserID={sourceUserID}&targetUserID={targetUserID}",
+          "host": [
+            "http://social-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "POST",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 30,
+              "timeout": 2,
+              "max_errors": 5,
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
+            },
+            "backend/http": {
+              "return_error_details": "message"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@comment": "This endpoint enables the client to get all communities a user profile follows (social)",
+      "endpoint": "/v1/gateway/social/user/{userID}/follow/communities",
+      "method": "GET",
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 1000,
+          "client_max_rate": 1000,
+          "strategy": "ip"
+        },
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+          "cache": true,
+          "disable_jwk_security": true,
+          "operation_debug": true,
+          "propagate_claims": [
+            [
+              "sub",
+              "x-user-authn-id"
+            ]
+          ]
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/v1/social/user/follow/communities?userID={userID}",
+          "host": [
+            "http://social-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "POST",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 30,
+              "timeout": 2,
+              "max_errors": 5,
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
+            },
+            "backend/http": {
+              "return_error_details": "message"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@comment": "This endpoint enables the client to accept pending profile requests (social)",
       "endpoint": "/v1/gateway/social/follow/accept/{followRecordID}",
       "method": "POST",
       "extra_config": {
@@ -874,6 +825,7 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client to get a user's pending profile requests (social)",
       "endpoint": "/v1/gateway/social/user/{userID}/follow/pending-requests",
       "method": "GET",
       "extra_config": {
@@ -928,6 +880,7 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client to block another user profile (social)",
       "endpoint": "/v1/gateway/social/block/source/{sourceUserID}/target/{targetUserID}",
       "method": "POST",
       "extra_config": {
@@ -1036,6 +989,7 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client to get a feed (user, news, notification) tied to a user or community (social)",
       "endpoint": "/v1/gateway/social/user/timeline",
       "input_query_strings": [
         "userID",
@@ -1096,6 +1050,7 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client to delete a comment associated to a post (social)",
       "endpoint": "/v1/gateway/social/",
       "input_query_strings": [
         "postID",
@@ -1154,6 +1109,7 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client to create a comment and associate it to a post (social)",
       "endpoint": "/v1/gateway/social/comment/post",
       "input_query_strings": [
         "postID",
@@ -1214,6 +1170,7 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client to get a community profile (social)",
       "endpoint": "/v1/gateway/social/community/{communityID}",
       "method": "GET",
       "extra_config": {
@@ -1268,6 +1225,7 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client to create a community profile (social)",
       "endpoint": "/v1/gateway/social/community/{userID}",
       "method": "POST",
       "extra_config": {
@@ -1322,6 +1280,7 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client to update a community profile (social)",
       "endpoint": "/v1/gateway/social/community/{communityProfileID}/user/{userID}",
       "method": "PUT",
       "extra_config": {
@@ -1376,6 +1335,7 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client to delete a community profile (social)",
       "endpoint": "/v1/gateway/social/community/{communityProfileID}/user/{userID}",
       "method": "DELETE",
       "extra_config": {
@@ -1430,6 +1390,7 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client to retrieve a post (social)",
       "endpoint": "/v1/gateway/social/user/{userID}/post/{postID}",
       "method": "GET",
       "extra_config": {
@@ -1484,6 +1445,7 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client to delete a post (social)",
       "endpoint": "/v1/gateway/social/user/{userID}/post/{postID}",
       "method": "DELETE",
       "extra_config": {
@@ -1538,6 +1500,7 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client to create a post (social)",
       "endpoint": "/v1/gateway/social/post",
       "input_query_strings": [
         "userID",
@@ -1597,6 +1560,7 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client to create a topic and associate it to a community profile (social)",
       "endpoint": "/v1/gateway/social/topic/user/{userID}/community/{communityProfileID}",
       "method": "POST",
       "extra_config": {
@@ -1651,6 +1615,7 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client to get all posts tied to a topic name",
       "endpoint": "/v1/gateway/social/posts/topic/{topicName}/community/{communityProfileID}",
       "method": "GET",
       "extra_config": {
@@ -1705,6 +1670,7 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client to get a user profile (social) by provided userID",
       "endpoint": "/v1/gateway/social/user/{userID}",
       "method": "GET",
       "extra_config": {
@@ -1759,6 +1725,7 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client to delete a user profile (social) by provided userID",
       "endpoint": "/v1/gateway/social/user/{userID}",
       "method": "DELETE",
       "extra_config": {
@@ -1813,6 +1780,7 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client to create a user profile (social) by provided userID",
       "endpoint": "/v1/gateway/social/user/{userID}",
       "method": "POST",
       "extra_config": {
@@ -1867,6 +1835,7 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client to update a user profile (social) by provided userID",
       "endpoint": "/v1/gateway/social/user/{userID}",
       "method": "PUT",
       "extra_config": {
@@ -1892,6 +1861,152 @@
       "backend": [
         {
           "url_pattern": "/v1/social/user?userID={userID}",
+          "host": [
+            "http://social-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "PUT",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 30,
+              "timeout": 2,
+              "max_errors": 5,
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
+            },
+            "backend/http": {
+              "return_error_details": "message"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@comment": "This endpoint enables the client to get all topics a user profile subscribes to",
+      "endpoint": "/v1/gateway/social/user/{userID}/topics",
+      "method": "GET",
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 1000,
+          "client_max_rate": 1000,
+          "strategy": "ip"
+        },
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+          "cache": true,
+          "disable_jwk_security": true,
+          "operation_debug": true,
+          "propagate_claims": [
+            [
+              "sub",
+              "x-user-authn-id"
+            ]
+          ]
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/v1/social/user/topics?userID={userID}",
+          "host": [
+            "http://social-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "PUT",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 30,
+              "timeout": 2,
+              "max_errors": 5,
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
+            },
+            "backend/http": {
+              "return_error_details": "message"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@comment": "This endpoint enables the client to get all community profiles on the platform in paginated manner",
+      "endpoint": "/v1/gateway/social/communities",
+      "input_query_strings": [
+        "pageSize",
+        "pageNumber"
+      ],
+      "method": "GET",
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 1000,
+          "client_max_rate": 1000,
+          "strategy": "ip"
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/v1/social/communities",
+          "host": [
+            "http://social-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "PUT",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 30,
+              "timeout": 2,
+              "max_errors": 5,
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
+            },
+            "backend/http": {
+              "return_error_details": "message"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@comment": "This endpoint enables the client to get all user profiles on the platform in paginated manner",
+      "endpoint": "/v1/gateway/social/users",
+      "input_query_strings": [
+        "pageSize",
+        "pageNumber"
+      ],
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 1000,
+          "client_max_rate": 1000,
+          "strategy": "ip"
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/v1/social/users",
           "host": [
             "http://social-service.prod.svc.cluster.local:9896"
           ],
