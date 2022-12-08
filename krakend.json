@@ -85,8 +85,8 @@
       "output_encoding": "no-op",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         }
       },
@@ -128,8 +128,8 @@
       "method": "POST",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -183,8 +183,8 @@
       "method": "POST",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "proxy": {
@@ -302,8 +302,8 @@
       "method": "DELETE",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -356,8 +356,8 @@
       "method": "GET",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -410,8 +410,8 @@
       "method": "PUT",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -468,8 +468,8 @@
       "method": "GET",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         }
       },
@@ -513,8 +513,8 @@
       "method": "GET",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         }
       },
@@ -555,8 +555,8 @@
       "method": "GET",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -610,8 +610,8 @@
       "method": "POST",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -665,8 +665,8 @@
       "method": "POST",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -720,8 +720,8 @@
       "method": "GET",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -775,8 +775,8 @@
       "method": "POST",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -830,8 +830,8 @@
       "method": "GET",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -885,8 +885,8 @@
       "method": "POST",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -939,8 +939,8 @@
       "method": "PUT",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -1000,8 +1000,8 @@
       "method": "GET",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -1059,8 +1059,8 @@
       "method": "DELETE",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -1120,8 +1120,8 @@
       "method": "POST",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -1175,8 +1175,8 @@
       "method": "GET",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -1230,8 +1230,8 @@
       "method": "POST",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -1285,8 +1285,8 @@
       "method": "PUT",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -1340,8 +1340,8 @@
       "method": "DELETE",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -1395,8 +1395,8 @@
       "method": "GET",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -1450,8 +1450,8 @@
       "method": "DELETE",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -1510,8 +1510,8 @@
       "method": "POST",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -1565,8 +1565,8 @@
       "method": "POST",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -1620,8 +1620,8 @@
       "method": "GET",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -1675,8 +1675,8 @@
       "method": "GET",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -1730,8 +1730,8 @@
       "method": "DELETE",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -1785,8 +1785,8 @@
       "method": "POST",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -1840,8 +1840,8 @@
       "method": "PUT",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -1895,8 +1895,8 @@
       "method": "GET",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
@@ -1954,8 +1954,8 @@
       "method": "GET",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         }
       },
@@ -1999,8 +1999,8 @@
       ],
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         }
       },
@@ -2040,8 +2040,8 @@
       "method": "POST",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         }
       },
@@ -2081,8 +2081,8 @@
       "method": "POST",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         }
       },
@@ -2122,8 +2122,8 @@
       "method": "GET",
       "extra_config": {
         "qos/ratelimit/router": {
-          "max_rate": 1000,
-          "client_max_rate": 1000,
+          "max_rate": 100000,
+          "client_max_rate": 100000,
           "strategy": "ip"
         },
         "auth/validator": {
