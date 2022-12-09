@@ -3,12 +3,12 @@ entries:
   api-gateway:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-12-09T05:21:38.294887603Z"
+    created: "2022-12-09T05:26:25.805333819Z"
     description: A Helm chart for Kubernetes
-    digest: 03939ed8d766c3dbfb8cf8bb664a7dc4027dc2e48d44cd9305e6f7990338cef8
+    digest: a6143e49a89b70b799e970159e8152899a84dfe7ffc3176a0ef7cf3d6d0198a5
     name: api-gateway
     type: application
     urls:
     - https://SimifiniiCTO.github.io/simfiny-api-gateway/api-gateway/api-gateway-0.1.0.tgz
     version: 0.1.0
-generated: "2022-12-09T05:21:38.293382784Z"
+generated: "2022-12-09T05:26:25.804489219Z"
