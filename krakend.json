@@ -550,6 +550,97 @@
       ]
     },
     {
+      "endpoint": "/v1/gateway/user/profile-and-account/{userID}",
+      "@comment": "purpose: obtains the profile and account of a given user based on provided userID",
+      "method": "POST",
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 100000,
+          "client_max_rate": 100000,
+          "strategy": "ip"
+        },
+        "proxy": {
+          "sequential": true
+        }
+      },
+      "backend": [
+        {
+          "@comment": "we query for the userID based on the provided user userID",
+          "url_pattern": "/api/v1/user/{userID}",
+          "host": [
+            "http://user-service.prod.svc.cluster.local:9896"
+          ],
+          "group": "user_account",
+          "target": "account",
+          "method": "GET",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 30,
+              "timeout": 2,
+              "max_errors": 5,
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
+            },
+            "backend/http": {
+              "return_error_details": "message"
+            }
+          },
+          "mapping": {
+            "id": "userAccountID",
+            "authnAccountId": "userAuthnAccountID"
+          }
+        },
+        {
+          "@comment": "we call the social service to obtain the social profile of the user",
+          "url_pattern": "/v1/social/user?userID={resp0_user_account.userAccountID}",
+          "host": [
+            "http://social-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "GET",
+          "group": "user_profile",
+          "target": "profile",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 30,
+              "timeout": 2,
+              "max_errors": 5,
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
+            },
+            "backend/http": {
+              "return_error_details": "message"
+            }
+          },
+          "mapping": {
+            "Id": "userProfileID"
+          },
+          "deny": [
+            "NewsFeedTimelineID",
+            "NotificationTimelineID",
+            "PersonalFeedTimelineID"
+          ]
+        }
+      ]
+    },
+    {
       "@comment": "This endpoint enables the client to get a community profile (social)",
       "endpoint": "/v1/gateway/social/user/{userID}/community",
       "method": "GET",
