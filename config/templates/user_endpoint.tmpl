@@ -120,7 +120,7 @@
 {
     "endpoint":"/v1/gateway/user/profile/{userID}",
     "@comment": "purpose: obtains the profile and account of a given user based on provided userID",
-    "method":"POST",
+    "method":"GET",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
         {{ include "sequential_endpoint.tmpl" }},
