@@ -552,7 +552,7 @@
     {
       "endpoint": "/v1/gateway/user/profile/{userID}",
       "@comment": "purpose: obtains the profile and account of a given user based on provided userID",
-      "method": "POST",
+      "method": "GET",
       "extra_config": {
         "qos/ratelimit/router": {
           "max_rate": 100000,
@@ -848,7 +848,7 @@
           "host": [
             "http://social-service.prod.svc.cluster.local:9896"
           ],
-          "method": "POST",
+          "method": "GET",
           "extra_config": {
             "modifier/martian": {
               "fifo.Group": {
