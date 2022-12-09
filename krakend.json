@@ -2023,7 +2023,7 @@
           "host": [
             "http://social-service.prod.svc.cluster.local:9896"
           ],
-          "method": "PUT",
+          "method": "GET",
           "extra_config": {
             "modifier/martian": {
               "fifo.Group": {
@@ -2069,7 +2069,7 @@
           "host": [
             "http://social-service.prod.svc.cluster.local:9896"
           ],
-          "method": "PUT",
+          "method": "GET",
           "extra_config": {
             "modifier/martian": {
               "fifo.Group": {
@@ -2114,7 +2114,7 @@
           "host": [
             "http://social-service.prod.svc.cluster.local:9896"
           ],
-          "method": "PUT",
+          "method": "GET",
           "extra_config": {
             "modifier/martian": {
               "fifo.Group": {
