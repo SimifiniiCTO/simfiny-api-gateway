@@ -123,7 +123,8 @@
     "method":"POST",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
-        {{ include "sequential_endpoint.tmpl" }}
+        {{ include "sequential_endpoint.tmpl" }},
+        {{ include "validator_endpoint.tmpl" }}
     },
     "backend":[
         {
