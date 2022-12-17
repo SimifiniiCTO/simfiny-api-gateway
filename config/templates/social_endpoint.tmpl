@@ -48,7 +48,7 @@
 },
 {
     "@comment":"This endpoint enables the client to send a follow profile request to a community profile (social)",
-    "endpoint":"/v1/gateway/social/follow/community/source/{sourceUserID}/target/{targetUserID}",
+    "endpoint":"/v1/gateway/social/follow/community/source/{sourceUserID}/target/{targetCommunityProfileID}",
     "method":"POST",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
@@ -56,7 +56,7 @@
     },
     "backend":[
     {
-        "url_pattern":"/v1/social/user/follow/community?sourceUserID={sourceUserID}&targetUserID={targetUserID}",
+        "url_pattern":"/v1/social/user/follow/community?sourceUserID={sourceUserID}&targetCommunityProfileID={targetCommunityProfileID}",
         "host":[
             "http://social-service.prod.svc.cluster.local:9896"
         ],
