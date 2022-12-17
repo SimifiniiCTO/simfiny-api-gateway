@@ -276,6 +276,10 @@
         {{ include "rate_limit_endpoint.tmpl" }},
         {{ include "validator_endpoint.tmpl" }}
     },
+    "input_query_strings": [
+        "RequestorProfileID",
+        "RequestorProfileType"
+    ],
     "backend":[
     {
         "url_pattern":"/v1/social/community?communityID={communityID}",
@@ -489,6 +493,10 @@
         {{ include "rate_limit_endpoint.tmpl" }},
         {{ include "validator_endpoint.tmpl" }}
     },
+    "input_query_strings": [
+        "RequestorProfileID",
+        "RequestorProfileType"
+    ],
     "backend":[
     {
         "url_pattern":"/v1/social/user?userID={userID}",
