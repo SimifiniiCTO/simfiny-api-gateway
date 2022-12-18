@@ -654,5 +654,49 @@
         }
     }
     ]
+},
+{
+    "@comment":"This endpoint enables the client add an affinity score to a post",
+    "endpoint":"/v1/gateway/social/post/affinity",
+    "extra_config":{
+        {{ include "rate_limit_endpoint.tmpl" }},
+        {{ include "validator_endpoint.tmpl" }}
+    },
+    "backend":[
+    {
+        "url_pattern":"/v1/social/post/affinity",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"POST",
+        "extra_config":{
+            {{ include "modifier_backend.tmpl" }},
+            {{ include "circuit_breaker_backend.tmpl" }},
+            {{ include "error_detail_backend.tmpl" }}
+        }
+    }
+    ]
+},
+{
+    "@comment":"This endpoint enables the client add an affinity score to a comment",
+    "endpoint":"/v1/gateway/social/comment/affinity",
+    "extra_config":{
+        {{ include "rate_limit_endpoint.tmpl" }},
+        {{ include "validator_endpoint.tmpl" }}
+    },
+    "backend":[
+    {
+        "url_pattern":"/v1/social/comment/affinity",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"POST",
+        "extra_config":{
+            {{ include "modifier_backend.tmpl" }},
+            {{ include "circuit_breaker_backend.tmpl" }},
+            {{ include "error_detail_backend.tmpl" }}
+        }
+    }
+    ]
 }
 {{end}}
