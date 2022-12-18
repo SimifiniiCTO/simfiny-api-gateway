@@ -2148,6 +2148,114 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client add an affinity score to a post",
+      "endpoint": "/v1/gateway/social/post/affinity",
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 100000,
+          "client_max_rate": 100000,
+          "strategy": "ip"
+        },
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+          "cache": true,
+          "disable_jwk_security": true,
+          "operation_debug": true,
+          "propagate_claims": [
+            [
+              "sub",
+              "x-user-authn-id"
+            ]
+          ]
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/v1/social/post/affinity",
+          "host": [
+            "http://social-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "POST",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 30,
+              "timeout": 2,
+              "max_errors": 5,
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
+            },
+            "backend/http": {
+              "return_error_details": "message"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@comment": "This endpoint enables the client add an affinity score to a comment",
+      "endpoint": "/v1/gateway/social/comment/affinity",
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 100000,
+          "client_max_rate": 100000,
+          "strategy": "ip"
+        },
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+          "cache": true,
+          "disable_jwk_security": true,
+          "operation_debug": true,
+          "propagate_claims": [
+            [
+              "sub",
+              "x-user-authn-id"
+            ]
+          ]
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/v1/social/comment/affinity",
+          "host": [
+            "http://social-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "POST",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 30,
+              "timeout": 2,
+              "max_errors": 5,
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
+            },
+            "backend/http": {
+              "return_error_details": "message"
+            }
+          }
+        }
+      ]
+    },
+    {
       "endpoint": "/v1/gateway/financials/user/setup/{userId}",
       "method": "POST",
       "extra_config": {
