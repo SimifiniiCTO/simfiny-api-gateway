@@ -2150,6 +2150,7 @@
     {
       "@comment": "This endpoint enables the client add an affinity score to a post",
       "endpoint": "/v1/gateway/social/post/affinity",
+      "method": "POST",
       "extra_config": {
         "qos/ratelimit/router": {
           "max_rate": 100000,
@@ -2204,6 +2205,7 @@
     {
       "@comment": "This endpoint enables the client add an affinity score to a comment",
       "endpoint": "/v1/gateway/social/comment/affinity",
+      "method": "POST",
       "extra_config": {
         "qos/ratelimit/router": {
           "max_rate": 100000,
