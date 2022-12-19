@@ -658,6 +658,7 @@
 {
     "@comment":"This endpoint enables the client add an affinity score to a post",
     "endpoint":"/v1/gateway/social/post/affinity",
+     "method":"POST",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
         {{ include "validator_endpoint.tmpl" }}
@@ -680,6 +681,7 @@
 {
     "@comment":"This endpoint enables the client add an affinity score to a comment",
     "endpoint":"/v1/gateway/social/comment/affinity",
+     "method":"POST",
     "extra_config":{
         {{ include "rate_limit_endpoint.tmpl" }},
         {{ include "validator_endpoint.tmpl" }}
