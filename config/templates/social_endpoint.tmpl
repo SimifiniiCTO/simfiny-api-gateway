@@ -700,5 +700,97 @@
         }
     }
     ]
+},
+{
+    "@comment":"This endpoint enables the client to report a given post",
+    "endpoint":"/v1/gateway/social/post/report",
+     "method":"POST",
+    "extra_config":{
+        {{ include "rate_limit_endpoint.tmpl" }},
+        {{ include "validator_endpoint.tmpl" }}
+    },
+    "backend":[
+    {
+        "url_pattern":"/v1/social/post/report",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"POST",
+        "extra_config":{
+            {{ include "modifier_backend.tmpl" }},
+            {{ include "circuit_breaker_backend.tmpl" }},
+            {{ include "error_detail_backend.tmpl" }}
+        }
+    }
+    ]
+},
+{
+    "@comment":"This endpoint enables the client to report a given comment",
+    "endpoint":"/v1/gateway/social/comment/report",
+     "method":"POST",
+    "extra_config":{
+        {{ include "rate_limit_endpoint.tmpl" }},
+        {{ include "validator_endpoint.tmpl" }}
+    },
+    "backend":[
+    {
+        "url_pattern":"/v1/social/comment/report",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"POST",
+        "extra_config":{
+            {{ include "modifier_backend.tmpl" }},
+            {{ include "circuit_breaker_backend.tmpl" }},
+            {{ include "error_detail_backend.tmpl" }}
+        }
+    }
+    ]
+},
+{
+    "@comment":"This endpoint enables the client to get blog posts by tag",
+    "endpoint":"/v1/gateway/social/blogs/tag/{tagname}",
+    "method":"GET",
+    "extra_config":{
+        {{ include "rate_limit_endpoint.tmpl" }},
+        {{ include "validator_endpoint.tmpl" }}
+    },
+    "backend":[
+    {
+        "url_pattern":"/v1/social/posts/blog?tag={tagname}",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"GET",
+        "extra_config":{
+            {{ include "modifier_backend.tmpl" }},
+            {{ include "circuit_breaker_backend.tmpl" }},
+            {{ include "error_detail_backend.tmpl" }}
+        }
+    }
+    ]
+},
+{
+    "@comment":"This endpoint enables the client to get blog posts by tag",
+    "endpoint":"/v1/gateway/social/blogs/community/{communityProfileID}",
+    "method":"GET",
+    "extra_config":{
+        {{ include "rate_limit_endpoint.tmpl" }},
+        {{ include "validator_endpoint.tmpl" }}
+    },
+    "backend":[
+    {
+        "url_pattern":"/v1/social/community/posts/blog?communityProfileID={communityProfileID}",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"GET",
+        "extra_config":{
+            {{ include "modifier_backend.tmpl" }},
+            {{ include "circuit_breaker_backend.tmpl" }},
+            {{ include "error_detail_backend.tmpl" }}
+        }
+    }
+    ]
 }
 {{end}}
