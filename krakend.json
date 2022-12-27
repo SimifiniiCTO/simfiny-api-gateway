@@ -1799,6 +1799,35 @@
       ],
       "backend": [
         {
+          "@comment": "we query for the user account based on the provided user userID",
+          "url_pattern": "/api/v1/user/{userID}",
+          "host": [
+            "http://user-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "GET",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 30,
+              "timeout": 2,
+              "max_errors": 5,
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
+            },
+            "backend/http": {
+              "return_error_details": "message"
+            }
+          }
+        },
+        {
           "url_pattern": "/v1/social/user?userID={userID}",
           "host": [
             "http://social-service.prod.svc.cluster.local:9896"

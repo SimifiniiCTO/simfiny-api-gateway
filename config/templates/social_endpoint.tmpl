@@ -499,6 +499,19 @@
     ],
     "backend":[
     {
+        "@comment": "we query for the user account based on the provided user userID",
+        "url_pattern":"/api/v1/user/{userID}",
+        "host":[
+            "http://user-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"GET",
+        "extra_config":{
+            {{ include "modifier_backend.tmpl" }},
+            {{ include "circuit_breaker_backend.tmpl" }},
+            {{ include "error_detail_backend.tmpl" }}
+        }
+    },
+    {
         "url_pattern":"/v1/social/user?userID={userID}",
         "host":[
             "http://social-service.prod.svc.cluster.local:9896"
