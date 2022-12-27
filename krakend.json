@@ -604,15 +604,11 @@
             "backend/http": {
               "return_error_details": "message"
             }
-          },
-          "mapping": {
-            "id": "userAccountID",
-            "authnAccountId": "userAuthnAccountID"
           }
         },
         {
           "@comment": "we call the social service to obtain the social profile of the user",
-          "url_pattern": "/v1/social/user?userID={resp0_account.userAccountID}",
+          "url_pattern": "/v1/social/user?userID={resp0_account.id}",
           "host": [
             "http://social-service.prod.svc.cluster.local:9896"
           ],
