@@ -133,8 +133,6 @@
             "host":[
                 "http://user-service.prod.svc.cluster.local:9896"
             ],
-            "group": "user_account",
-            "target": "account",
             "method":"GET",
             "extra_config":{
                 {{ include "modifier_backend.tmpl" }},
@@ -148,13 +146,11 @@
         },
         {
             "@comment": "we call the social service to obtain the social profile of the user",
-            "url_pattern":"/v1/social/user?userID={resp0_user_account.userAccountID}",
+            "url_pattern":"/v1/social/user?userID={resp0_account.userAccountID}",
             "host":[
                 "http://social-service.prod.svc.cluster.local:9896"
             ],
             "method":"GET",
-            "group": "user_profile",
-            "target": "profile",
             "extra_config":{
                 {{ include "modifier_backend.tmpl" }},
                 {{ include "circuit_breaker_backend.tmpl" }},
