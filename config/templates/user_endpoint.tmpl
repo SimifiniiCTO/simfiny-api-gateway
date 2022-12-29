@@ -136,8 +136,7 @@
             "method":"GET",
             "extra_config":{
                 {{ include "modifier_backend.tmpl" }},
-                {{ include "circuit_breaker_backend.tmpl" }},
-                {{ include "error_detail_backend.tmpl" }}
+                {{ include "circuit_breaker_backend.tmpl" }}
             }
         },
         {
@@ -149,8 +148,7 @@
             "method":"GET",
             "extra_config":{
                 {{ include "modifier_backend.tmpl" }},
-                {{ include "circuit_breaker_backend.tmpl" }},
-                {{ include "error_detail_backend.tmpl" }}
+                {{ include "circuit_breaker_backend.tmpl" }}
             },
              "mapping": {
                 "Id": "userProfileID"
