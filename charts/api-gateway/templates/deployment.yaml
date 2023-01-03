@@ -19,6 +19,7 @@ spec:
   template:
     metadata:
       annotations:
+        timestamp: "{{ now | date "20060102150405" }}"
         {{- range $key, $value := .Values.podAnnotations }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
