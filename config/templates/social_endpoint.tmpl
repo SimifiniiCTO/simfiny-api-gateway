@@ -713,5 +713,85 @@
         }
     }
     ]
+},
+{
+    "@comment":"This endpoint enables the client to get the most trending posts",
+    "endpoint":"/v1/gateway/social/feeds/trending",
+    "method":"GET",
+    "input_query_strings": [
+        "pageSize",
+        "pageNumber"
+    ],
+    "extra_config":{
+        {{ include "rate_limit_endpoint.tmpl" }},
+        {{ include "validator_endpoint.tmpl" }}
+    },
+    "backend":[
+    {
+        "url_pattern":"/v1/social/posts/trending",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"GET",
+        "extra_config":{
+            {{ include "modifier_backend.tmpl" }},
+            {{ include "circuit_breaker_backend.tmpl" }},
+            {{ include "error_detail_backend.tmpl" }}
+        }
+    }
+    ]
+},
+{
+    "@comment":"This endpoint enables the client to get the posts with the highest affinity scores",
+    "endpoint":"/v1/gateway/social/feeds/affinity",
+    "method":"GET",
+    "input_query_strings": [
+        "pageSize",
+        "pageNumber"
+    ],
+    "extra_config":{
+        {{ include "rate_limit_endpoint.tmpl" }},
+        {{ include "validator_endpoint.tmpl" }}
+    },
+    "backend":[
+    {
+        "url_pattern":"/v1/social/posts/affinity-score",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"GET",
+        "extra_config":{
+            {{ include "modifier_backend.tmpl" }},
+            {{ include "circuit_breaker_backend.tmpl" }},
+            {{ include "error_detail_backend.tmpl" }}
+        }
+    }
+    ]
+},
+{
+    "@comment":"This endpoint enables the client to get the posts with the highest affinity scores",
+    "endpoint":"/v1/gateway/social/posts/blog",
+    "method":"GET",
+    "input_query_strings": [
+        "tag"
+    ],
+    "extra_config":{
+        {{ include "rate_limit_endpoint.tmpl" }},
+        {{ include "validator_endpoint.tmpl" }}
+    },
+    "backend":[
+    {
+        "url_pattern":"/v1/social/posts/blog",
+        "host":[
+            "http://social-service.prod.svc.cluster.local:9896"
+        ],
+        "method":"GET",
+        "extra_config":{
+            {{ include "modifier_backend.tmpl" }},
+            {{ include "circuit_breaker_backend.tmpl" }},
+            {{ include "error_detail_backend.tmpl" }}
+        }
+    }
+    ]
 }
 {{end}}

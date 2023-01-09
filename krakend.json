@@ -2279,6 +2279,182 @@
       ]
     },
     {
+      "@comment": "This endpoint enables the client to get the most trending posts",
+      "endpoint": "/v1/gateway/social/feeds/trending",
+      "method": "GET",
+      "input_query_strings": [
+        "pageSize",
+        "pageNumber"
+      ],
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 100000,
+          "client_max_rate": 100000,
+          "strategy": "ip"
+        },
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+          "cache": true,
+          "disable_jwk_security": true,
+          "operation_debug": true,
+          "propagate_claims": [
+            [
+              "sub",
+              "x-user-authn-id"
+            ]
+          ]
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/v1/social/posts/trending",
+          "host": [
+            "http://social-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "GET",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 30,
+              "timeout": 2,
+              "max_errors": 5,
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
+            },
+            "backend/http": {
+              "return_error_details": "message"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@comment": "This endpoint enables the client to get the posts with the highest affinity scores",
+      "endpoint": "/v1/gateway/social/feeds/affinity",
+      "method": "GET",
+      "input_query_strings": [
+        "pageSize",
+        "pageNumber"
+      ],
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 100000,
+          "client_max_rate": 100000,
+          "strategy": "ip"
+        },
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+          "cache": true,
+          "disable_jwk_security": true,
+          "operation_debug": true,
+          "propagate_claims": [
+            [
+              "sub",
+              "x-user-authn-id"
+            ]
+          ]
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/v1/social/posts/affinity-score",
+          "host": [
+            "http://social-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "GET",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 30,
+              "timeout": 2,
+              "max_errors": 5,
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
+            },
+            "backend/http": {
+              "return_error_details": "message"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@comment": "This endpoint enables the client to get the posts with the highest affinity scores",
+      "endpoint": "/v1/gateway/social/posts/blog",
+      "method": "GET",
+      "input_query_strings": [
+        "tag"
+      ],
+      "extra_config": {
+        "qos/ratelimit/router": {
+          "max_rate": 100000,
+          "client_max_rate": 100000,
+          "strategy": "ip"
+        },
+        "auth/validator": {
+          "alg": "RS256",
+          "jwk_url": "http://authentication-service.prod.svc.cluster.local:8000/jwks",
+          "cache": true,
+          "disable_jwk_security": true,
+          "operation_debug": true,
+          "propagate_claims": [
+            [
+              "sub",
+              "x-user-authn-id"
+            ]
+          ]
+        }
+      },
+      "backend": [
+        {
+          "url_pattern": "/v1/social/posts/blog",
+          "host": [
+            "http://social-service.prod.svc.cluster.local:9896"
+          ],
+          "method": "GET",
+          "extra_config": {
+            "modifier/martian": {
+              "fifo.Group": {
+                "scope": [
+                  "request",
+                  "response"
+                ],
+                "aggregateErrors": true
+              }
+            },
+            "qos/circuit-breaker": {
+              "interval": 30,
+              "timeout": 2,
+              "max_errors": 5,
+              "log_status_change": true,
+              "name": "simfiny-circuit-breaker"
+            },
+            "backend/http": {
+              "return_error_details": "message"
+            }
+          }
+        }
+      ]
+    },
+    {
       "endpoint": "/v1/gateway/financials/user/setup/{userId}",
       "method": "POST",
       "extra_config": {
