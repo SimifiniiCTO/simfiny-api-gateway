@@ -3,11 +3,11 @@
   "port": 8080,
   "name": "Simfinii Backend API Gateway",
   "cache_ttl": "3600s",
-  "timeout": "30s",
-  "read_timeout": "30s",
-  "write_timeout": "30s",
-  "idle_timeout": "30s",
-  "read_header_timeout": "30000ms",
+  "timeout": "10000ms",
+  "read_timeout": "10000ms",
+  "write_timeout": "10000ms",
+  "idle_timeout": "10000ms",
+  "read_header_timeout": "10000ms",
   "max_idle_connections": 150,
   "extra_config": {
     "documentation/openapi": {
@@ -110,7 +110,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -165,7 +165,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -213,7 +213,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -248,7 +248,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -285,7 +285,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -339,7 +339,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -393,7 +393,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -447,7 +447,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -492,7 +492,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -537,7 +537,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -596,7 +596,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -625,7 +625,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -688,7 +688,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -743,7 +743,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -798,7 +798,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -853,7 +853,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -908,7 +908,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -963,7 +963,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -1018,7 +1018,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -1072,7 +1072,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -1133,7 +1133,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -1192,7 +1192,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -1253,7 +1253,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -1312,7 +1312,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -1367,7 +1367,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -1422,7 +1422,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -1477,7 +1477,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -1532,7 +1532,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -1587,7 +1587,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -1647,7 +1647,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -1702,7 +1702,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -1757,7 +1757,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -1817,7 +1817,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -1845,7 +1845,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -1900,7 +1900,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -1955,7 +1955,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -2010,7 +2010,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -2065,7 +2065,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -2111,7 +2111,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -2156,7 +2156,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -2211,7 +2211,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -2266,7 +2266,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -2307,7 +2307,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -2348,7 +2348,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
@@ -2402,7 +2402,7 @@
             },
             "qos/circuit-breaker": {
               "interval": 30,
-              "timeout": 2,
+              "timeout": 10,
               "max_errors": 5,
               "log_status_change": true,
               "name": "simfiny-circuit-breaker"
